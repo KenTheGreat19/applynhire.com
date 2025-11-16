@@ -1,7 +1,7 @@
 const API_BASE = 'http://127.0.0.1:8000';
 
 // Sample job data - In production, this would come from an API
-let jobsData = [
+const jobsData = [
     {
         id: 1,
         title: "Senior Frontend Developer",
@@ -292,102 +292,145 @@ let jobsData = [
     }
 ];
 
-// State management
-let filteredJobs = [...jobsData];
-
-// DOM elements
-const searchInput = document.getElementById('searchInput');
-const locationFilter = document.getElementById('locationFilter');
-const typeFilter = document.getElementById('typeFilter');
-const categoryFilter = document.getElementById('categoryFilter');
-const jobsList = document.getElementById('jobsList');
-const resultsCount = document.getElementById('resultsCount');
-const clearFilters = document.getElementById('clearFilters');
-const noResults = document.getElementById('noResults');
-const loading = document.getElementById('loading');
-const modal = document.getElementById('jobModal');
-const closeModal = document.getElementsByClassName('close')[0];
-
-// Initialize the page
-async function init() {
-    await fetchJobsFromAPI();
-    attachEventListeners();
+// Utility functions
+function formatJobType(type) {
+    const types = {
+        'full-time': 'Full Time',
+        'part-time': 'Part Time',
+        'contract': 'Contract',
+        'internship': 'Internship'
+    };
+    return types[type] || type;
 }
 
-// Render jobs to the page
-function renderJobs(jobs) {
-    jobsList.innerHTML = '';
-    
-    if (jobs.length === 0) {
-        noResults.style.display = 'block';
-        jobsList.style.display = 'none';
-    } else {
-        noResults.style.display = 'none';
-        jobsList.style.display = 'grid';
-        
-        jobs.forEach(job => {
-            const jobCard = createJobCard(job);
-            jobsList.appendChild(jobCard);
-        });
-    }
-    
-    resultsCount.textContent = `${jobs.length} job${jobs.length !== 1 ? 's' : ''} found`;
+function formatCategory(category) {
+    const categories = {
+        'technology': 'Technology',
+        'design': 'Design',
+        'marketing': 'Marketing',
+        'sales': 'Sales',
+        'finance': 'Finance'
+    };
+    return categories[category] || category;
 }
 
-// Create a job card element
-function createJobCard(job) {
-    const card = document.createElement('div');
-    card.className = 'job-card';
-    card.style.cursor = 'pointer';
-    card.onclick = () => navigateToJobDetail(job.id);
-    
+// Get job ID from URL parameters
+function getJobIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return parseInt(params.get('id'), 10);
+}
+
+// Find job by ID
+function findJobById(jobId) {
+    return jobsData.find(job => job.id === jobId);
+}
+
+// Render job detail
+function renderJobDetail(job) {
+    const container = document.getElementById('jobDetailContainer');
     const companyInitial = job.company.charAt(0);
-    
-    card.innerHTML = `
-        <div class="job-card-header">
-            <div class="company-logo">${companyInitial}</div>
-            <div class="job-info">
-                <h3 class="job-title">${job.title}</h3>
-                <p class="company-name">${job.company}</p>
+
+    container.innerHTML = `
+        <div class="job-detail-header">
+            <div class="job-detail-header-top">
+                <div class="company-logo-large">${companyInitial}</div>
+                <div class="job-detail-header-info">
+                    <h1 class="job-detail-title">${job.title}</h1>
+                    <p class="job-detail-company">${job.company}</p>
+                </div>
+            </div>
+            
+            <div class="job-detail-meta-grid">
+                <div class="meta-detail">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Location</span>
+                    <strong>${job.location}</strong>
+                </div>
+                <div class="meta-detail">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Type</span>
+                    <strong>${formatJobType(job.type)}</strong>
+                </div>
+                <div class="meta-detail">
+                    <i class="fas fa-folder"></i>
+                    <span>Category</span>
+                    <strong>${formatCategory(job.category)}</strong>
+                </div>
+                <div class="meta-detail">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>Salary</span>
+                    <strong>${job.salary}</strong>
+                </div>
+                <div class="meta-detail">
+                    <i class="far fa-clock"></i>
+                    <span>Posted</span>
+                    <strong>${job.posted}</strong>
+                </div>
             </div>
         </div>
-        <div class="job-meta">
-            <span class="meta-item">
-                <i class="fas fa-map-marker-alt"></i>
-                ${job.location}
-            </span>
-            <span class="meta-item">
-                <i class="fas fa-briefcase"></i>
-                ${formatJobType(job.type)}
-            </span>
-            <span class="meta-item">
-                <i class="fas fa-folder"></i>
-                ${formatCategory(job.category)}
-            </span>
-        </div>
-        <p class="job-description">${job.description}</p>
-        <div class="job-tags">
-            ${job.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-        </div>
-        <div class="job-footer">
-            <span class="salary">${job.salary}</span>
-            <span class="posted-date">
-                <i class="far fa-clock"></i> ${job.posted}
-            </span>
+
+        <div class="job-detail-content">
+            <div class="job-detail-main">
+                <section class="job-detail-section">
+                    <h2>About the Role</h2>
+                    <p>${job.description}</p>
+                </section>
+
+                <section class="job-detail-section">
+                    <h2>Requirements</h2>
+                    <ul class="requirements-list">
+                        ${job.requirements.map(req => `<li>${req}</li>`).join('')}
+                    </ul>
+                </section>
+
+                <section class="job-detail-section">
+                    <h2>Responsibilities</h2>
+                    <ul class="responsibilities-list">
+                        ${job.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
+                    </ul>
+                </section>
+
+                <section class="job-detail-section">
+                    <h2>Required Skills</h2>
+                    <div class="job-tags">
+                        ${job.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </section>
+            </div>
+
+            <aside class="job-detail-sidebar">
+                <button class="apply-btn-large" onclick="applyForJob(${job.id})">
+                    <i class="fas fa-paper-plane"></i> Apply Now
+                </button>
+                <div class="job-info-card">
+                    <h3>How to Apply</h3>
+                    <p>Click the "Apply Now" button to submit your application. You'll need to be signed in to your APPLY N HIRE account.</p>
+                </div>
+                <div class="job-info-card">
+                    <h3>Share This Job</h3>
+                    <div class="share-buttons">
+                        <button class="share-btn" onclick="shareOnLinkedIn(${job.id})" title="Share on LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </button>
+                        <button class="share-btn" onclick="shareOnTwitter(${job.id})" title="Share on Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="share-btn" onclick="copyJobLink()" title="Copy link">
+                            <i class="fas fa-link"></i>
+                        </button>
+                    </div>
+                </div>
+            </aside>
         </div>
     `;
-    
-    return card;
 }
 
-// Navigate to job detail page
-function navigateToJobDetail(jobId) {
-    window.location.href = `job-detail.html?id=${jobId}`;
-}
-
-// Apply for job (placeholder function)
+// Apply for job
 function applyForJob(jobId) {
-    const session = (window.authCommon && typeof authCommon.getSession === 'function') ? authCommon.getSession() : JSON.parse(localStorage.getItem('applynhireSession'));
+    const session = (window.authCommon && typeof authCommon.getSession === 'function') 
+        ? authCommon.getSession() 
+        : JSON.parse(localStorage.getItem('applynhireSession'));
+    
     if (!session) {
         const goToAuth = confirm('You need to be signed in to apply. Sign in now?');
         if (goToAuth) {
@@ -396,13 +439,11 @@ function applyForJob(jobId) {
         return;
     }
 
-    // prompt user for a short cover letter
     const cover = prompt('Optional: Add a short cover message (or press OK to skip):');
     const applicantName = session.name || '';
     const applicantEmail = session.email;
-    // Build payload
     const payload = { job_id: jobId, name: applicantName, email: applicantEmail, cover_letter: cover };
-    // Submit to API, fallback to alert
+
     (async () => {
         try {
             let headers = { 'Content-Type': 'application/json' };
@@ -430,120 +471,62 @@ function applyForJob(jobId) {
     })();
 }
 
-// Filter jobs based on search and filters
-function filterJobs() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const location = locationFilter.value;
-    const type = typeFilter.value;
-    const category = categoryFilter.value;
-    
-    filteredJobs = jobsData.filter(job => {
-        const matchesSearch = job.title.toLowerCase().includes(searchTerm) ||
-                            job.company.toLowerCase().includes(searchTerm) ||
-                            job.description.toLowerCase().includes(searchTerm) ||
-                            job.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-        
-        const matchesLocation = !location || 
-                               job.location.toLowerCase().replace(/\s+/g, '-') === location;
-        
-        const matchesType = !type || job.type === type;
-        
-        const matchesCategory = !category || job.category === category;
-        
-        return matchesSearch && matchesLocation && matchesType && matchesCategory;
-    });
-    
-    renderJobs(filteredJobs);
+// Share functions
+function shareOnLinkedIn(jobId) {
+    const url = window.location.href;
+    const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    window.open(linkedInShareUrl, '_blank');
 }
 
-// Clear all filters
-function clearAllFilters() {
-    searchInput.value = '';
-    locationFilter.value = '';
-    typeFilter.value = '';
-    categoryFilter.value = '';
-    filterJobs();
+function shareOnTwitter(jobId) {
+    const url = window.location.href;
+    const job = findJobById(jobId);
+    const text = `Check out this ${job.title} position at ${job.company} on APPLY N HIRE!`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    window.open(twitterUrl, '_blank');
 }
 
-// Format job type for display
-function formatJobType(type) {
-    return type.split('-').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-}
-
-// Format category for display
-function formatCategory(category) {
-    return category.charAt(0).toUpperCase() + category.slice(1);
-}
-
-// Attach event listeners
-function attachEventListeners() {
-    // Search and filter inputs
-    searchInput.addEventListener('input', filterJobs);
-    locationFilter.addEventListener('change', filterJobs);
-    typeFilter.addEventListener('change', filterJobs);
-    categoryFilter.addEventListener('change', filterJobs);
-    
-    // Clear filters button
-    clearFilters.addEventListener('click', clearAllFilters);
-    
-    // Modal close
-    closeModal.onclick = function() {
-        modal.style.display = 'none';
-    }
-    
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    }
-    
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && modal.style.display === 'block') {
-            modal.style.display = 'none';
-        }
+function copyJobLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+        alert('Job link copied to clipboard!');
+    }).catch(() => {
+        alert('Failed to copy link');
     });
 }
 
-// Simulate loading jobs (for demo purposes)
-function simulateLoading() {
-    loading.style.display = 'block';
-    jobsList.style.display = 'none';
+// Initialize page
+function init() {
+    const jobId = getJobIdFromURL();
     
-    setTimeout(() => {
-        loading.style.display = 'none';
-        init();
-    }, 800);
-}
-
-// Start the application
-// simulateLoading(); // Uncomment to show loading animation
-init();
-
-// Optional: Function to fetch jobs from an API
-async function fetchJobsFromAPI() {
-    try {
-        loading.style.display = 'block';
-        jobsList.style.display = 'none';
-        const response = await fetch(`${API_BASE}/api/jobs`);
-        if (response.ok) {
-            const data = await response.json();
-            // normalize data if necessary (backend returns arrays for list fields)
-            jobsData = data;
-        }
-        
-        loading.style.display = 'none';
-        renderJobs(jobsData);
-    } catch (error) {
-        console.error('Error fetching jobs:', error);
-        loading.style.display = 'none';
-        // If we fail to fetch (backend down), fallback to local demo jobs
-        console.warn('Falling back to client-side demo jobs');
-        renderJobs(jobsData);
+    if (!jobId || isNaN(jobId)) {
+        showNoJobFound();
+        return;
     }
+
+    const job = findJobById(jobId);
+    
+    if (!job) {
+        showNoJobFound();
+        return;
+    }
+
+    // Update page title
+    document.title = `${job.title} at ${job.company} - APPLY N HIRE`;
+    
+    // Hide loading, show content
+    document.getElementById('loadingDetail').style.display = 'none';
+    document.getElementById('jobDetailContainer').style.display = 'block';
+    
+    // Render job details
+    renderJobDetail(job);
 }
 
-// Uncomment to use API integration
-// fetchJobsFromAPI();
+function showNoJobFound() {
+    document.getElementById('loadingDetail').style.display = 'none';
+    document.getElementById('jobDetailContainer').style.display = 'none';
+    document.getElementById('noJobFound').style.display = 'block';
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', init);
