@@ -1,5 +1,5 @@
 // Sample job data - In production, this would come from an API
-const jobsData = [
+window.jobsData = [
     {
         id: 1,
         title: "Senior Frontend Developer",
@@ -291,9 +291,7 @@ const jobsData = [
 ];
 
 // State management
-let filteredJobs = [...jobsData];
-
-// DOM elements
+    let filteredJobs = [...window.jobsData];// DOM elements
 const searchInput = document.getElementById('searchInput');
 const locationFilter = document.getElementById('locationFilter');
 const typeFilter = document.getElementById('typeFilter');
@@ -308,7 +306,7 @@ const closeModal = document.getElementsByClassName('close')[0];
 
 // Initialize the page
 function init() {
-    renderJobs(jobsData);
+    renderJobs(window.jobsData);
     attachEventListeners();
 }
 
@@ -455,7 +453,7 @@ function filterJobs() {
     const type = typeFilter.value;
     const category = categoryFilter.value;
     
-    filteredJobs = jobsData.filter(job => {
+    filteredJobs = window.jobsData.filter(job => {
         const matchesSearch = job.title.toLowerCase().includes(searchTerm) ||
                             job.company.toLowerCase().includes(searchTerm) ||
                             job.description.toLowerCase().includes(searchTerm) ||
@@ -549,10 +547,10 @@ async function fetchJobsFromAPI() {
         // Example API call (replace with your actual API endpoint)
         // const response = await fetch('https://api.example.com/jobs');
         // const data = await response.json();
-        // jobsData = data;
+        // window.jobsData = data;
         
         loading.style.display = 'none';
-        renderJobs(jobsData);
+        renderJobs(window.jobsData);
     } catch (error) {
         console.error('Error fetching jobs:', error);
         loading.style.display = 'none';

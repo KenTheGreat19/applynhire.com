@@ -242,3 +242,54 @@ This project is open source and available under the [MIT License](LICENSE).
 3. Add database integration
 4. Set up actual job application processing
 5. Implement security measures (input sanitization, etc.)
+
+## Admin Dashboard
+
+The project now includes a comprehensive admin dashboard for managing job listings.
+
+### Features
+
+- **Dashboard Statistics**: Overview of total jobs, companies, locations, and categories
+- **Job Management**: Full CRUD operations (Create, Read, Update, Delete) for job listings
+- **Real-time Updates**: Changes made in admin reflect immediately on the main site
+- **Responsive Interface**: Admin panel works on all device sizes
+
+### Accessing the Admin Dashboard
+
+1. Open the main website (`index.html`)
+2. Click the "Admin Dashboard" link in the header
+3. The admin interface loads with current job data
+
+### Managing Jobs
+
+#### Adding a New Job
+1. Click "Add New Job" button
+2. Fill in all required fields marked with (*)
+3. Add job requirements and responsibilities (one per line)
+4. Add relevant tags separated by commas
+5. Click "Save Job"
+
+#### Editing Existing Jobs
+1. Click the "Edit" button next to any job in the table
+2. Modify the job information as needed
+3. Click "Save Job" to update
+
+#### Deleting Jobs
+1. Click the "Delete" button next to any job
+2. Confirm deletion in the popup modal
+3. Job is permanently removed
+
+### Technical Details
+
+- **Files**: `admin.html`, `admin.css`, `admin.js`
+- **Data Sharing**: Uses global `window.jobsData` for real-time synchronization
+- **UI Components**: Modal forms, responsive tables, notification system
+- **Validation**: Client-side form validation for required fields
+
+### Future Admin Enhancements
+
+- User authentication and authorization
+- Bulk job import/export
+- Job analytics and reporting
+- Email notifications for new applications
+- Advanced filtering and sorting options
