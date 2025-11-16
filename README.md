@@ -35,16 +35,16 @@ git clone https://github.com/KenTheGreat19/Project-1.1.git
 cd Project-1.1
 ```
 
-2. Open `index.html` in your web browser:
+2. Open `site/index.html` in your web browser (root `index.html` redirects here):
 ```bash
 # On Linux
-xdg-open index.html
+xdg-open site/index.html
 
 # On macOS
-open index.html
+open site/index.html
 
 # On Windows
-start index.html
+start site/index.html
 ```
 
 Or simply double-click the `index.html` file.
@@ -93,23 +93,30 @@ Then open your browser and navigate to `http://localhost:8000`
 
 ```
 Project-1.1/
-├── index.html      # Main HTML structure
-├── styles.css      # All styling and responsive design
-├── script.js       # JavaScript functionality and job data
-├── signin.html      # Sign in page
-├── signup.html      # Sign up page
-├── employer-signin.html # Employer sign in page (role-locked)
-├── employer-signup.html # Employer sign up page (role-locked)
-├── auth-common.js   # Shared auth helpers (session, hashing etc.) - demo only
-├── signin.js        # Sign in logic (client-only demo)
-├── signup.js        # Sign up logic (client-only demo)
-├── employer-signin.js # Employer sign-in logic (role-locked)
-├── employer-signup.js # Employer sign-up logic (role-locked)
-├── applicant.html   # Applicant dashboard (role-based page)
-├── employer.html    # Employer dashboard (role-based page)
-├── siteAuth.js      # Small script to show sign-in/sign-out in header
-└── README.md       # This file
+├── site/            # All website content (HTML/CSS/JS)
+│   ├── index.html
+│   ├── styles.css
+│   ├── script.js
+│   ├── signin.html
+│   ├── signup.html
+│   ├── employer-signin.html
+│   ├── employer-signup.html
+│   ├── auth-common.js
+│   ├── auth-forms.js   # Consolidated sign-in/up logic replacing signin.js, signup.js, employer-* files
+│   ├── applicant.html
+│   ├── employer.html
+│   └── siteAuth.js
+├── README.md         # This file
+└── tests/            # Unit/integration tests
 ```
+
+## Migration Notes
+
+- The primary site files (HTML/CSS/JS) were moved into the `site/` directory for better organization.
+- A consolidated auth script (`site/auth-forms.js`) replaces the multiple per-page auth scripts to reduce duplication.
+- Root HTML files now redirect to `site/` equivalents to retain backward compatibility while keeping the project structure tidy.
+- Legacy root JS files are kept for reference but should not be used; new code runs from under `site/`.
+
 
 ## Features Breakdown
 

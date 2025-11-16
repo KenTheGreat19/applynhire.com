@@ -1,5 +1,4 @@
-/* Deprecated: main job logic moved to site/script.js */
-/* If you are developing, use site/script.js instead. */
+// Sample job data - In production, this would come from an API
 const jobsData = [
     {
         id: 1,

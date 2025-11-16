@@ -1,5 +1,4 @@
-// DEPRECATED: This file was replaced by `auth-common.js`, `signin.js`, and `signup.js`.
-// Kept for reference only; do not include this file in pages.
+/* Deprecated: logic consolidated into site/auth-forms.js and site/auth-common.js */
 
 // Utility: SHA-256 hash
 async function hashStringSHA256(message) {
@@ -151,10 +150,7 @@ signInForm.addEventListener('submit', async (e) => {
     }, 500);
 });
 
-function showMessage(msg, type = 'info') {
-    messageEl.textContent = msg;
-    messageEl.className = 'auth-message ' + type;
-}
+// This file is deprecated and kept only for historical reference. See site/auth-forms.js and site/auth-common.js
 
 function redirectToRolePage(role) {
     if (role === 'employer') {
@@ -165,10 +161,4 @@ function redirectToRolePage(role) {
 }
 
 // If the user is already signed in, optionally redirect from auth page
-(function onLoad() {
-    const session = getSession();
-    if (session) {
-        // Optional: redirect if user directly lands here
-        // redirectToRolePage(session.role);
-    }
-})();
+// End of deprecated file.
