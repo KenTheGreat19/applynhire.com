@@ -446,7 +446,7 @@ function showJobDetail(job) {
 
 // Apply for job (placeholder function)
 function applyForJob(jobId) {
-    const sessionRaw = localStorage.getItem('jobAggregatorSession');
+    const sessionRaw = localStorage.getItem('applynhireSession');
     const session = sessionRaw ? JSON.parse(sessionRaw) : null;
     if (!session) {
         const goToAuth = confirm('You need to be signed in to apply. Sign in now?');

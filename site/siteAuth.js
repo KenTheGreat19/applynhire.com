@@ -1,7 +1,7 @@
 // Small site auth utility to show sign in/out status in header nav
 
 function getSession() {
-    const raw = localStorage.getItem('jobAggregatorSession');
+    const raw = localStorage.getItem('applynhireSession');
     return raw ? JSON.parse(raw) : null;
 }
 
@@ -25,10 +25,10 @@ function showHeaderAuth() {
         signOutBtn.textContent = 'Sign Out';
         signOutBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            if (window.authCommon && typeof window.authCommon.clearSession === 'function') {
+                if (window.authCommon && typeof window.authCommon.clearSession === 'function') {
                 window.authCommon.clearSession();
             } else {
-                localStorage.removeItem('jobAggregatorSession');
+                	localStorage.removeItem('applynhireSession');
             }
             location.reload();
         });

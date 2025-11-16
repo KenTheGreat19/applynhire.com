@@ -13,7 +13,7 @@ engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
-app = FastAPI(title="Job Aggregator - Backend (FastAPI)")
+app = FastAPI(title="APPLY N HIRE - Backend (FastAPI)")
 
 app.add_middleware(
     CORSMiddleware,

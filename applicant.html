@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Applicant Dashboard - Job Aggregator</title>
+    <title>Applicant Dashboard - APPLY N HIRE</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -22,7 +22,7 @@
     <header class="site-header">
         <div class="container header-row">
             <div class="brand">
-                <a class="site-logo" href="index.html"><i class="fas fa-user"></i> Applicant Dashboard</a>
+                <a class="site-logo" href="index.html"><i class="fas fa-user"></i> APPLY N HIRE</a>
                 <p class="tagline">Welcome to your applicant dashboard</p>
             </div>
             <div class="right-nav"><nav class="auth-nav"></nav></div>
@@ -40,7 +40,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 Job Aggregator.</p>
+            <p>&copy; 2025 APPLY N HIRE. | applynhire.com</p>
         </div>
     </footer>
 
@@ -49,7 +49,7 @@
     <script>
         // Basic session check
         function getSession() {
-            const raw = localStorage.getItem('jobAggregatorSession');
+            const raw = localStorage.getItem('applynhireSession');
             return raw ? JSON.parse(raw) : null;
         }
 
@@ -64,7 +64,7 @@
         }
 
         document.getElementById('signOutBtn').addEventListener('click', () => {
-            localStorage.removeItem('jobAggregatorSession');
+            localStorage.removeItem('applynhireSession');
             location.href = 'signin.html';
         });
     </script>

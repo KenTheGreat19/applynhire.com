@@ -8,9 +8,41 @@ async function hashStringSHA256(message) {
     return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Local storage keys
-const ACCOUNTS_KEY = 'jobAggregatorAccounts';
-const SESSION_KEY = 'jobAggregatorSession';
+// Local storage keys (rename to match branding)
+const ACCOUNTS_KEY = 'applynhireAccounts';
+const SESSION_KEY = 'applynhireSession';
+
+// Legacy keys from previous branding (used for migration fallback)
+const LEGACY_ACCOUNTS_KEY = 'jobAggregatorAccounts';
+const LEGACY_SESSION_KEY = 'jobAggregatorSession';
+
+function migrateLegacyLocalStorage() {
+    try {
+        const existingSession = localStorage.getItem(SESSION_KEY);
+        if (!existingSession) {
+            const legacy = localStorage.getItem(LEGACY_SESSION_KEY);
+            if (legacy) {
+                localStorage.setItem(SESSION_KEY, legacy);
+                localStorage.removeItem(LEGACY_SESSION_KEY);
+                console.info('Migrated legacy session to applynhireSession');
+            }
+        }
+        const existingAccounts = localStorage.getItem(ACCOUNTS_KEY);
+        if (!existingAccounts) {
+            const legacyAccounts = localStorage.getItem(LEGACY_ACCOUNTS_KEY);
+            if (legacyAccounts) {
+                localStorage.setItem(ACCOUNTS_KEY, legacyAccounts);
+                localStorage.removeItem(LEGACY_ACCOUNTS_KEY);
+                console.info('Migrated legacy accounts to applynhireAccounts');
+            }
+        }
+    } catch (e) {
+        console.warn('LocalStorage migration error', e);
+    }
+}
+
+// Run migration at script load
+migrateLegacyLocalStorage();
 
 // Account helpers
 function getAccounts() {

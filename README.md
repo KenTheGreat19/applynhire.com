@@ -1,6 +1,6 @@
-# Job Aggregator Website
+# APPLY N HIRE Website
 
-A modern, responsive job aggregator website built with HTML, CSS, and vanilla JavaScript. This application allows users to search and filter job listings across various categories, locations, and employment types.
+A modern, responsive job platform—APPLY N HIRE—where users can apply for jobs and employers can hire talent for free. This application allows users to search and filter job listings across various categories, locations, and employment types.
 
 ## Features
 
@@ -116,6 +116,27 @@ Project-1.1/
 - A consolidated auth script (`site/auth-forms.js`) replaces the multiple per-page auth scripts to reduce duplication.
 - Root HTML files now redirect to `site/` equivalents to retain backward compatibility while keeping the project structure tidy.
 - Legacy root JS files are kept for reference but should not be used; new code runs from under `site/`.
+
+Branding and LocalStorage migration
+---------------------------------
+
+- The project has been rebranded to **APPLY N HIRE**: the UI labels, titles, and footers reflect this change.
+- LocalStorage keys previously used in this demo (`jobAggregatorAccounts`, `jobAggregatorSession`) were renamed to `applynhireAccounts` and `applynhireSession` and a migration fallback has been added to `site/auth-common.js` and `auth.js` to automatically copy old values to the new keys at runtime.
+
+Updating the site logo
+----------------------
+
+The repo contains a placeholder SVG logo at `site/vendor/images/logo.svg` and `vendor/images/logo.svg`, and the HTML is set up to use a PNG in `vendor/images/logo.png` if present with a fallback to the SVG. To replace the placeholder with the image you attached:
+
+1. Run the PowerShell helper to copy your PNG into the site and root vendor folders (run from repository root):
+
+```powershell
+.\scripts\replace-logo.ps1 -SourcePath C:\path\to\your\logo.png
+```
+
+2. Optionally, create a favicon using ImageMagick (the script attempts to do this automatically if `convert` is available).
+
+3. Commit the images if you want them in version control. If you prefer we can add them for you in a PR.
 
 ## Backend (Optional)
 

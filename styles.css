@@ -61,6 +61,7 @@ header {
 }
 
 .site-logo i { margin-right: 8px; }
+.site-logo-img { height: 36px; width: auto; vertical-align: middle; margin-right: 8px; }
 
 .tagline {
     font-size: 0.85rem;

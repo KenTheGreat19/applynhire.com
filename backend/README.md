@@ -60,10 +60,12 @@ curl -X POST "http://127.0.0.1:8000/api/import-demo-jobs" -H "Content-Type: appl
 
 Browser snippet for migrating localStorage accounts into backend
 ----------------------------------------------------------------
-If you have demo accounts stored in localStorage under `jobAggregatorAccounts`, you can run this snippet in the browser console to post them to the backend import endpoint:
+If you have demo accounts stored in localStorage under `applynhireAccounts`, you can run this snippet in the browser console to post them to the backend import endpoint:
 
 ```javascript
-const accounts = JSON.parse(localStorage.getItem('jobAggregatorAccounts') || '[]');
+// NOTE: The project was rebranded to APPLY N HIRE and localStorage keys renamed.
+// The migration helper will migrate values from legacy keys into new keys automatically.
+const accounts = JSON.parse(localStorage.getItem('applynhireAccounts') || '[]');
 fetch('http://127.0.0.1:8000/api/import-demo-accounts', {
 	method: 'POST',
 	headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': 'replace-with-admin-secret' },
