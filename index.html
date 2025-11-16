@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Aggregator - Find Your Dream Job</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -58,6 +59,12 @@
             </div>
         </section>
 
+        <!-- World Map Section -->
+        <section class="map-section">
+            <div id="jobMap" class="map-container"></div>
+            <h2>Job Locations Worldwide</h2>
+        </section>
+
         <!-- Job Listings -->
         <section class="jobs-section">
             <div id="jobsList" class="jobs-grid">
@@ -91,6 +98,7 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
