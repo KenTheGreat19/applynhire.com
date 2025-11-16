@@ -537,6 +537,7 @@ footer {
     background: #f0f8ff;
     overflow: hidden;
     position: relative;
+    /* keep static sizing; no transitions to keep UI minimal */
 }
 
 /* Mobile responsiveness for map */
@@ -587,35 +588,14 @@ footer {
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-.map-legend {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    margin-top: 0.75rem;
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.map-legend div {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-}
-
-.map-legend span {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    display: inline-block;
-}
+/* removed legend styles to keep UI minimal */
 
 /* Fullscreen toggle button in the top-right of the map container */
 .map-fullscreen-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 9500;
+    z-index: 9601;
     background: rgba(0,0,0,0.6);
     color: white;
     border: none;
@@ -639,6 +619,8 @@ footer {
     height: 100vh;
     padding: 16px 20px;
     background: white;
+    /* minimal fullscreen style; no transitions */
+    transform: none;
 }
 
 .map-section.fullscreen .map-container {
@@ -647,8 +629,27 @@ footer {
     max-width: none;
 }
 
+/* When the map container uses native/fullscreen add slight fade effect */
+.map-section { opacity: 1; }
+.map-section.fullscreen { opacity: 1; }
+
 /* Slightly adjust the legend when fullscreen */
-.map-section.fullscreen .map-legend { margin-top: 8px; }
+/* legend has been removed; no adjustment required */
 
 /* Fullscreen close icon */
 .map-fullscreen-btn .icon { font-size: 14px; opacity: 0.95; }
+
+/* Hide header & footer when in fullscreen mode (native or overlay) */
+body.map-fullscreen-active header,
+body.map-fullscreen-active footer {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 220ms ease, opacity 220ms ease;
+}
+
+/* Slightly scale the map for a subtle zoom effect */
+.map-section.fullscreen .map-container {
+    /* keep the map container full height; no scaling */
+    transition: height 0ms;
+}

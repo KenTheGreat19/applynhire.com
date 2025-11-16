@@ -466,29 +466,13 @@ function attachPopupFilter(event, location) {
 }
 
 function appendMapLegend(container) {
-    const legend = document.createElement('div');
-    legend.className = 'map-legend';
-    legend.innerHTML = `
-        <div><span style="background:#2563eb"></span>City locations</div>
-        <div><span style="background:#10b981"></span>Remote roles</div>
-        <div>Tap a marker to filter job cards</div>
-    `;
-
-    const parentSection = container.closest('.map-section');
-    if (parentSection) {
-        const existingLegend = parentSection.querySelector('.map-legend');
-        if (existingLegend) {
-            existingLegend.remove();
-        }
-        parentSection.appendChild(legend);
-    } else {
-        container.appendChild(legend);
-    }
+    // Keep the UI minimal: do not append a legend. Only show fullscreen control.
 
     // Append a fullscreen toggle button on the map container (top-right overlay)
     const fullscreenBtn = document.createElement('button');
     fullscreenBtn.className = 'map-fullscreen-btn';
     fullscreenBtn.setAttribute('aria-label', 'Toggle full screen');
+    fullscreenBtn.setAttribute('title', 'Toggle full screen');
     fullscreenBtn.innerHTML = '<span class="icon">⛶</span><span class="label">Full Screen</span>';
     // create event listener
     fullscreenBtn.addEventListener('click', () => {
@@ -508,33 +492,156 @@ function toggleMapFullscreen(section) {
     const map = container._leafletMap || window._currentLeafletMap;
     const btn = section.querySelector('.map-fullscreen-btn');
 
-    const ENTERED = section.classList.toggle('fullscreen');
-    if (ENTERED) {
-        // remember scroll position
-        section._previousScroll = window.pageYOffset || document.documentElement.scrollTop;
-        document.body.style.overflow = 'hidden';
-        if (btn) btn.querySelector('.label').textContent = 'Exit Full Screen';
-    } else {
-        document.body.style.overflow = '';
-        if (section._previousScroll != null) window.scrollTo(0, section._previousScroll);
-        if (btn) btn.querySelector('.label').textContent = 'Full Screen';
-    }
+    // If the browser supports the native Fullscreen API, try to use it.
+    // cross-browser check for native Fullscreen API support
+    const canUseNativeFullscreen = !!( (section.requestFullscreen || section.webkitRequestFullscreen || section.msRequestFullscreen) && (document.fullscreenEnabled || document.webkitIsFullScreen === true || document.msFullscreenElement) );
 
-    // Resize the map to make sure it renders properly
-    setTimeout(() => {
-        try {
-            if (map && typeof map.invalidateSize === 'function') map.invalidateSize();
-        } catch (e) { console.warn('Error invalidating map size on fullscreen toggle', e); }
-    }, 200);
+    const isCurrentlyFullscreen = document.fullscreenElement === section || section.classList.contains('fullscreen');
+
+    if (canUseNativeFullscreen) {
+        if (!isCurrentlyFullscreen) {
+            // Save scroll position and then request native fullscreen
+            section._previousScroll = window.pageYOffset || document.documentElement.scrollTop;
+            requestFullscreenCompat(section).catch(err => {
+                // If native request is denied, fallback to overlay mode
+                console.warn('Native fullscreen request failed, falling back to overlay fullscreen.', err);
+                enterOverlayFullscreen(section, btn);
+            });
+        } else {
+            // Exit native fullscreen
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                exitFullscreenCompat().catch(err => {
+                    console.warn('Error exiting fullscreen, toggling overlay fallback instead.', err);
+                    exitOverlayFullscreen(section, btn);
+                });
+            } else {
+                exitOverlayFullscreen(section, btn);
+            }
+        }
+    } else {
+        // No native support, toggle overlay fullscreen
+        const ENTERED = section.classList.toggle('fullscreen');
+        if (ENTERED) enterOverlayFullscreen(section, btn); else exitOverlayFullscreen(section, btn);
+    }
+}
+
+/* Cross-browser helper for requesting fullscreen; returns a Promise-like object
+   that resolves for modern browsers or via immediate resolve for prefixed calls. */
+function requestFullscreenCompat(element) {
+    if (element.requestFullscreen) {
+        return element.requestFullscreen();
+    }
+    if (element.webkitRequestFullscreen) {
+        // Safari iOS/older may not return a Promise, so wrap
+        return new Promise((resolve, reject) => {
+            try { element.webkitRequestFullscreen(); resolve(); } catch (e) { reject(e); }
+        });
+    }
+    if (element.msRequestFullscreen) {
+        return new Promise((resolve, reject) => {
+            try { element.msRequestFullscreen(); resolve(); } catch (e) { reject(e); }
+        });
+    }
+    return Promise.reject(new Error('Fullscreen API is not supported on this element'));
+}
+
+function exitFullscreenCompat() {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return new Promise((resolve, reject) => { try { document.webkitExitFullscreen(); resolve(); } catch (e) { reject(e); } });
+    if (document.msExitFullscreen) return new Promise((resolve, reject) => { try { document.msExitFullscreen(); resolve(); } catch (e) { reject(e); } });
+    return Promise.reject(new Error('Exit fullscreen is not supported on this document'));
+}
+
+function enterOverlayFullscreen(section, btn) {
+    const container = section.querySelector('.map-container');
+    section.classList.add('fullscreen');
+    document.body.classList.add('map-fullscreen-active');
+    // remember scroll position
+    section._previousScroll = window.pageYOffset || document.documentElement.scrollTop;
+    document.body.style.overflow = 'hidden';
+    if (btn) {
+        btn.querySelector('.label').textContent = 'Exit Full Screen';
+        btn.setAttribute('aria-pressed', 'true');
+    }
+    // Ensure map is resized
+    const map = container._leafletMap || window._currentLeafletMap;
+    setTimeout(() => { try { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); } catch (e) { console.warn('Error invalidating map size on enterOverlayFullscreen', e); } }, 200);
+}
+
+function exitOverlayFullscreen(section, btn) {
+    const container = section.querySelector('.map-container');
+    section.classList.remove('fullscreen');
+    document.body.classList.remove('map-fullscreen-active');
+    document.body.style.overflow = '';
+    if (section._previousScroll != null) window.scrollTo(0, section._previousScroll);
+    if (btn) {
+        btn.querySelector('.label').textContent = 'Full Screen';
+        btn.setAttribute('aria-pressed', 'false');
+    }
+    // Ensure map is resized
+    const map = container._leafletMap || window._currentLeafletMap;
+    setTimeout(() => { try { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); } catch (e) { console.warn('Error invalidating map size on exitOverlayFullscreen', e); } }, 200);
 }
 
 // Listen for Escape key to exit fullscreen
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+        // If native fullscreen is active, exit it first
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            return;
+        }
+
         const active = document.querySelector('.map-section.fullscreen');
         if (active) toggleMapFullscreen(active);
     }
 });
+
+// Listen for native fullscreen change events to update UI and map size
+function _handleFullscreenChange() {
+    const fsElem = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    if (fsElem && fsElem.classList && fsElem.classList.contains('map-section')) {
+        // Entered native fullscreen for a map section
+        fsElem.classList.add('fullscreen');
+        document.body.classList.add('map-fullscreen-active');
+        // update button text if present
+        const btn = fsElem.querySelector('.map-fullscreen-btn');
+        if (btn) {
+            btn.querySelector('.label').textContent = 'Exit Full Screen';
+            btn.setAttribute('aria-pressed', 'true');
+        }
+        // invalidate map size
+        const container = fsElem.querySelector('.map-container');
+        const map = container && (container._leafletMap || window._currentLeafletMap);
+        setTimeout(() => {
+            try { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); } catch (e) { console.warn('Error invalidating map size on fullscreenchange enter', e); }
+        }, 200);
+    } else {
+        // Exited native fullscreen — remove classes globally
+        const active = document.querySelector('.map-section.fullscreen');
+        if (active) {
+            active.classList.remove('fullscreen');
+            if (active._previousScroll != null) window.scrollTo(0, active._previousScroll);
+        }
+        document.body.classList.remove('map-fullscreen-active');
+        document.body.style.overflow = '';
+        // Reset aria-pressed if we have a button inside the map-section
+        if (active) {
+            const btnActive = active.querySelector('.map-fullscreen-btn');
+            if (btnActive) btnActive.setAttribute('aria-pressed', 'false');
+        }
+        // Try to resize the current map
+        const container = document.querySelector('.map-container');
+        const map = container && (container._leafletMap || window._currentLeafletMap);
+        setTimeout(() => {
+            try { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); } catch (e) { console.warn('Error invalidating map size on fullscreenchange exit', e); }
+        }, 200);
+    }
+}
+
+document.addEventListener('fullscreenchange', _handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', _handleFullscreenChange);
+document.addEventListener('msfullscreenchange', _handleFullscreenChange);
 
 function filterJobsByLocation(location) {
     // Update location filter
