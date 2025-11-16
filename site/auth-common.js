@@ -35,6 +35,17 @@ function clearSession() {
     localStorage.removeItem(SESSION_KEY);
 }
 
+// Return token for use in Authorization headers (if present)
+function getToken() {
+    const session = getSession();
+    return session && session.token ? session.token : null;
+}
+
+function getAuthHeader() {
+    const token = getToken();
+    return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 // Small helper to redirect to role page
 function redirectToRolePage(role) {
     if (role === 'employer') {
@@ -53,4 +64,5 @@ window.authCommon = {
     saveSession,
     clearSession,
     redirectToRolePage
+    , getToken, getAuthHeader
 };

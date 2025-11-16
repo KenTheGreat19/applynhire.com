@@ -117,6 +117,23 @@ Project-1.1/
 - Root HTML files now redirect to `site/` equivalents to retain backward compatibility while keeping the project structure tidy.
 - Legacy root JS files are kept for reference but should not be used; new code runs from under `site/`.
 
+## Backend (Optional)
+
+This repository now includes a minimal FastAPI backend in `backend/` with basic authentication endpoints (signup/signin/profile). It's optional — the frontend continues to work without it since client-only auth is present for demo purposes.
+
+To run the backend (developer mode):
+
+```powershell
+cd backend
+python -m venv .venv; .\.venv\Scripts\Activate; pip install -r requirements.txt
+$env:JWT_SECRET='replace-with-a-strong-secret'; uvicorn backend.app:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open http://127.0.0.1:8000/docs for API docs when the server is running.
+
+When the backend is running, the client-side sign-in and sign-up will send requests to `http://127.0.0.1:8000/api` endpoints instead of using localStorage.
+
+
 
 ## Features Breakdown
 
@@ -240,6 +257,11 @@ Modify CSS variables in `styles.css`:
 
 Potential features to add:
 - [ ] Backend API integration
+
+API Integration
+---------------
+This repository now includes a minimal FastAPI backend at `backend/` which serves authentication and jobs endpoints. The website's main job listing page (`site/index.html`) will attempt to fetch jobs from `http://127.0.0.1:8000/api/jobs` when available; otherwise it falls back to local demo data in `site/script.js`.
+
 - [ ] User authentication and saved jobs
 - [ ] Job application tracking
 - [ ] Email alerts for new jobs

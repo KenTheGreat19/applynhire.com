@@ -25,7 +25,11 @@ function showHeaderAuth() {
         signOutBtn.textContent = 'Sign Out';
         signOutBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('jobAggregatorSession');
+            if (window.authCommon && typeof window.authCommon.clearSession === 'function') {
+                window.authCommon.clearSession();
+            } else {
+                localStorage.removeItem('jobAggregatorSession');
+            }
             location.reload();
         });
 

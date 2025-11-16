@@ -1,5 +1,7 @@
+const API_BASE = 'http://127.0.0.1:8000';
+
 // Sample job data - In production, this would come from an API
-const jobsData = [
+let jobsData = [
     {
         id: 1,
         title: "Senior Frontend Developer",
@@ -307,8 +309,8 @@ const modal = document.getElementById('jobModal');
 const closeModal = document.getElementsByClassName('close')[0];
 
 // Initialize the page
-function init() {
-    renderJobs(jobsData);
+async function init() {
+    await fetchJobsFromAPI();
     attachEventListeners();
 }
 
@@ -445,8 +447,7 @@ function showJobDetail(job) {
 
 // Apply for job (placeholder function)
 function applyForJob(jobId) {
-    const sessionRaw = localStorage.getItem('jobAggregatorSession');
-    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    const session = (window.authCommon && typeof authCommon.getSession === 'function') ? authCommon.getSession() : JSON.parse(localStorage.getItem('jobAggregatorSession'));
     if (!session) {
         const goToAuth = confirm('You need to be signed in to apply. Sign in now?');
         if (goToAuth) {
@@ -455,7 +456,38 @@ function applyForJob(jobId) {
         return;
     }
 
-    alert(`Application process for job ID ${jobId} would be initiated here. You are signed in as ${session.email} (${session.role}).`);
+    // prompt user for a short cover letter
+    const cover = prompt('Optional: Add a short cover message (or press OK to skip):');
+    const applicantName = session.name || '';
+    const applicantEmail = session.email;
+    // Build payload
+    const payload = { job_id: jobId, name: applicantName, email: applicantEmail, cover_letter: cover };
+    // Submit to API, fallback to alert
+    (async () => {
+        try {
+            let headers = { 'Content-Type': 'application/json' };
+            if (window.authCommon && typeof authCommon.getAuthHeader === 'function') {
+                headers = { ...headers, ...authCommon.getAuthHeader() };
+            } else {
+                const token = session && session.token ? session.token : null;
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+            }
+            const resp = await fetch(`${API_BASE}/api/jobs/${jobId}/apply`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(payload)
+            });
+            if (resp.ok) {
+                alert('Application submitted successfully.');
+            } else {
+                const err = await resp.json().catch(() => ({ detail: 'Application failed' }));
+                alert('Application failed: ' + (err.detail || 'Unknown error'));
+            }
+        } catch (e) {
+            console.warn('Apply network error, showing fallback message', e);
+            alert(`Application process for job ID ${jobId} would be initiated here. You are signed in as ${applicantEmail} (${session.role}).`);
+        }
+    })();
 }
 
 // Filter jobs based on search and filters
@@ -555,18 +587,21 @@ async function fetchJobsFromAPI() {
     try {
         loading.style.display = 'block';
         jobsList.style.display = 'none';
-        
-        // Example API call (replace with your actual API endpoint)
-        // const response = await fetch('https://api.example.com/jobs');
-        // const data = await response.json();
-        // jobsData = data;
+        const response = await fetch(`${API_BASE}/api/jobs`);
+        if (response.ok) {
+            const data = await response.json();
+            // normalize data if necessary (backend returns arrays for list fields)
+            jobsData = data;
+        }
         
         loading.style.display = 'none';
         renderJobs(jobsData);
     } catch (error) {
         console.error('Error fetching jobs:', error);
         loading.style.display = 'none';
-        noResults.style.display = 'block';
+        // If we fail to fetch (backend down), fallback to local demo jobs
+        console.warn('Falling back to client-side demo jobs');
+        renderJobs(jobsData);
     }
 }
 

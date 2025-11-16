@@ -26,6 +26,38 @@
             <p>Post jobs, view applicants, and manage listings from here.</p>
             <button id="signOutBtn" class="secondary-btn">Sign Out</button>
         </div>
+
+        <section class="container job-posting">
+            <h3>Post a Job</h3>
+            <form id="jobPostForm" class="auth-form">
+                <label>Title</label>
+                <input id="jobTitle" required>
+                <label>Company</label>
+                <input id="jobCompany" value="" required>
+                <label>Location</label>
+                <input id="jobLocation" value="Remote">
+                <label>Type</label>
+                <select id="jobType">
+                    <option value="full-time">Full Time</option>
+                    <option value="part-time">Part Time</option>
+                    <option value="contract">Contract</option>
+                </select>
+                <label>Category</label>
+                <input id="jobCategory" value="technology">
+                <label>Salary</label>
+                <input id="jobSalary">
+                <label>Description</label>
+                <textarea id="jobDescription"></textarea>
+                <label>Tags (comma-separated)</label>
+                <input id="jobTags">
+                <button type="submit" class="primary-btn">Post Job</button>
+            </form>
+        </section>
+
+        <section class="container employer-jobs">
+            <h3>Your Jobs</h3>
+            <div id="employerJobsList"></div>
+        </section>
     </main>
 
     <footer>
@@ -35,6 +67,7 @@
     </footer>
 
     <script src="siteAuth.js"></script>
+    <script src="auth-common.js"></script>
     <script src="header.js"></script>
     <script>
         // Basic session check
@@ -57,6 +90,65 @@
             localStorage.removeItem('jobAggregatorSession');
             location.href = 'signin.html';
         });
+
+        // Employer job posting and list
+        async function loadEmployerJobs() {
+            const token = (window.authCommon && authCommon.getToken) ? authCommon.getToken() : (session && session.token);
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            try {
+                const resp = await fetch('http://127.0.0.1:8000/api/employer/jobs', { headers });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    const list = document.getElementById('employerJobsList');
+                    list.innerHTML = '';
+                    data.forEach(job => {
+                        const el = document.createElement('div');
+                        el.className = 'job-card';
+                        el.innerHTML = `<strong>${job.title}</strong> at ${job.company} - <em>${job.location}</em>`;
+                        list.appendChild(el);
+                    });
+                }
+            } catch (e) {
+                console.error('Failed to load employer jobs', e);
+            }
+        }
+
+        document.getElementById('jobPostForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('jobTitle').value;
+            const company = document.getElementById('jobCompany').value;
+            const location = document.getElementById('jobLocation').value;
+            const type = document.getElementById('jobType').value;
+            const category = document.getElementById('jobCategory').value;
+            const salary = document.getElementById('jobSalary').value;
+            const description = document.getElementById('jobDescription').value;
+            const tags = (document.getElementById('jobTags').value || '').split(',').map(t => t.trim()).filter(Boolean);
+            const token = (window.authCommon && authCommon.getToken) ? authCommon.getToken() : (session && session.token);
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            try {
+                const resp = await fetch('http://127.0.0.1:8000/api/jobs', {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ title, company, location, type, category, salary, description, tags })
+                });
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({ detail: 'Failed to create job' }));
+                    alert('Failed to create job: ' + (err.detail || 'Unknown error'));
+                    return;
+                }
+                const newJob = await resp.json();
+                alert('Job posted successfully.');
+                document.getElementById('jobPostForm').reset();
+                loadEmployerJobs();
+            } catch (e) {
+                console.error('Job create error', e);
+                alert('Could not reach backend to create job');
+            }
+        });
+
+        // Load jobs initially
+        loadEmployerJobs();
     </script>
 </body>
 </html>
