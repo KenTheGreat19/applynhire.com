@@ -609,3 +609,46 @@ footer {
     border-radius: 50%;
     display: inline-block;
 }
+
+/* Fullscreen toggle button in the top-right of the map container */
+.map-fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 9500;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    gap: .4rem;
+    align-items: center;
+}
+
+.map-fullscreen-btn:hover { background: rgba(0,0,0,0.8); }
+
+/* When the map is full screen hide border radius and expand */
+.map-section.fullscreen {
+    position: fixed;
+    inset: 0; /* top:0;right:0;bottom:0;left:0 */
+    z-index: 9999;
+    margin: 0 !important;
+    width: 100vw;
+    height: 100vh;
+    padding: 16px 20px;
+    background: white;
+}
+
+.map-section.fullscreen .map-container {
+    height: calc(100vh - 90px);
+    border-radius: 0;
+    max-width: none;
+}
+
+/* Slightly adjust the legend when fullscreen */
+.map-section.fullscreen .map-legend { margin-top: 8px; }
+
+/* Fullscreen close icon */
+.map-fullscreen-btn .icon { font-size: 14px; opacity: 0.95; }

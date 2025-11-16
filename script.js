@@ -410,6 +410,9 @@ function renderLeafletMap(container) {
     map.once('load', () => map.invalidateSize());
 
     appendMapLegend(container);
+
+    // Expose map on container so toggle function can access it
+    try { container._leafletMap = map; window._currentLeafletMap = map; } catch (e) {}
 }
 
 function groupJobsByLocation(jobs) {
@@ -481,7 +484,57 @@ function appendMapLegend(container) {
     } else {
         container.appendChild(legend);
     }
+
+    // Append a fullscreen toggle button on the map container (top-right overlay)
+    const fullscreenBtn = document.createElement('button');
+    fullscreenBtn.className = 'map-fullscreen-btn';
+    fullscreenBtn.setAttribute('aria-label', 'Toggle full screen');
+    fullscreenBtn.innerHTML = '<span class="icon">⛶</span><span class="label">Full Screen</span>';
+    // create event listener
+    fullscreenBtn.addEventListener('click', () => {
+        const mapSection = container.closest('.map-section');
+        if (!mapSection) return;
+        toggleMapFullscreen(mapSection);
+    });
+    // ensure only one button exists
+    const existingBtn = container.querySelector('.map-fullscreen-btn');
+    if (existingBtn) existingBtn.remove();
+    container.appendChild(fullscreenBtn);
 }
+
+function toggleMapFullscreen(section) {
+    const container = section.querySelector('.map-container');
+    if (!container) return;
+    const map = container._leafletMap || window._currentLeafletMap;
+    const btn = section.querySelector('.map-fullscreen-btn');
+
+    const ENTERED = section.classList.toggle('fullscreen');
+    if (ENTERED) {
+        // remember scroll position
+        section._previousScroll = window.pageYOffset || document.documentElement.scrollTop;
+        document.body.style.overflow = 'hidden';
+        if (btn) btn.querySelector('.label').textContent = 'Exit Full Screen';
+    } else {
+        document.body.style.overflow = '';
+        if (section._previousScroll != null) window.scrollTo(0, section._previousScroll);
+        if (btn) btn.querySelector('.label').textContent = 'Full Screen';
+    }
+
+    // Resize the map to make sure it renders properly
+    setTimeout(() => {
+        try {
+            if (map && typeof map.invalidateSize === 'function') map.invalidateSize();
+        } catch (e) { console.warn('Error invalidating map size on fullscreen toggle', e); }
+    }, 200);
+}
+
+// Listen for Escape key to exit fullscreen
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const active = document.querySelector('.map-section.fullscreen');
+        if (active) toggleMapFullscreen(active);
+    }
+});
 
 function filterJobsByLocation(location) {
     // Update location filter
