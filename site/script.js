@@ -1,0 +1,3 @@
+// Copy of main script for /site/
+// Direct copy of main script.js
+// ...existing code...

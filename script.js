@@ -773,3 +773,143 @@ async function fetchJobsFromAPI() {
 
 // Uncomment to use API integration
 // fetchJobsFromAPI();
+
+// === Authentication (localStorage-based demo) ===
+function setToken(token) {
+    localStorage.setItem('applynhire_token', token);
+}
+
+function getToken() {
+    return localStorage.getItem('applynhire_token');
+}
+
+function clearToken() {
+    localStorage.removeItem('applynhire_token');
+}
+
+async function renderHeaderAuth() {
+    const headerActions = document.querySelector('.header-actions');
+    if (!headerActions) return;
+    const token = getToken();
+    if (!token) {
+        headerActions.innerHTML = `<a href="admin.html" class="admin-link" style="display:none"><i class="fas fa-cog"></i> Admin Dashboard</a>` +
+            ` <button id="signInBtn" class="btn btn-outline">Sign In</button>` +
+            ` <button id="signUpBtn" class="btn btn-primary">Sign Up</button>`;
+        attachAuthEvents();
+        return;
+    }
+    try {
+        const res = await fetch('/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (!res.ok) throw new Error('Not authenticated');
+        const user = await res.json();
+        headerActions.innerHTML = `<span class="user-welcome">Hi, ${escapeHtml(user.first_name)}</span> ` +
+            (user.role === 'employer' ? `<a href="admin.html" class="admin-link"><i class="fas fa-cog"></i> Employer Dashboard</a>` : `<a href="dashboard.html" class="admin-link"><i class="fas fa-user"></i> My Applications</a>`) +
+            ` <button id="signOutBtn" class="btn btn-outline">Sign out</button>`;
+        document.getElementById('signOutBtn').addEventListener('click', () => {
+            clearToken();
+            renderHeaderAuth();
+        });
+    } catch (err) {
+        clearToken();
+        headerActions.innerHTML = `<a href="admin.html" class="admin-link" style="display:none"><i class="fas fa-cog"></i> Admin Dashboard</a>` +
+            ` <button id="signInBtn" class="btn btn-outline">Sign In</button>` +
+            ` <button id="signUpBtn" class="btn btn-primary">Sign Up</button>`;
+        attachAuthEvents();
+    }
+}
+
+function escapeHtml(text) {
+    var map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+function attachAuthEvents() {
+    const signInBtn = document.getElementById('signInBtn');
+    const signUpBtn = document.getElementById('signUpBtn');
+    const signinModal = document.getElementById('signinModal');
+    const signupModal = document.getElementById('signupModal');
+    const signinClose = document.getElementById('signinClose');
+    const signupClose = document.getElementById('signupClose');
+    const signinForm = document.getElementById('signinForm');
+    const signupForm = document.getElementById('signupForm');
+    const openSignInFromSignUp = document.getElementById('openSignInFromSignUp');
+    const openSignUpFromSignIn = document.getElementById('openSignUpFromSignIn');
+
+    signInBtn && signInBtn.addEventListener('click', () => { signinModal.style.display = 'block'; });
+    signUpBtn && signUpBtn.addEventListener('click', () => { signupModal.style.display = 'block'; });
+    signinClose && signinClose.addEventListener('click', () => { signinModal.style.display = 'none'; });
+    signupClose && signupClose.addEventListener('click', () => { signupModal.style.display = 'none'; });
+
+    openSignUpFromSignIn && openSignUpFromSignIn.addEventListener('click', (e) => { e.preventDefault(); signinModal.style.display = 'none'; signupModal.style.display = 'block'; });
+    openSignInFromSignUp && openSignInFromSignUp.addEventListener('click', (e) => { e.preventDefault(); signupModal.style.display = 'none'; signinModal.style.display = 'block'; });
+
+    if (signupForm) {
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const firstName = document.getElementById('signupFirstName').value.trim();
+            const lastName = document.getElementById('signupLastName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signupPassword').value;
+            const confirm = document.getElementById('signupConfirm').value;
+            const roleEls = document.getElementsByName('role');
+            let role = 'applicant';
+            for (const el of roleEls) { if (el.checked) { role = el.value; break; } }
+
+            if (!email || !password || !firstName || !lastName) { alert('Please fill the required fields.'); return; }
+            if (password !== confirm) { alert('Passwords do not match.'); return; }
+
+            try {
+                const res = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ first_name: firstName, last_name: lastName, email, password, role })
+                });
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.detail || 'Registration failed');
+                }
+                const data = await res.json();
+                setToken(data.access_token);
+                signupModal.style.display = 'none';
+                await renderHeaderAuth();
+                alert('Account created — you are now signed in.');
+            } catch (err) {
+                alert(err.message || 'Failed to register');
+            }
+        });
+    }
+
+    if (signinForm) {
+        signinForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signinEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signinPassword').value;
+            try {
+                const body = new URLSearchParams();
+                body.append('username', email);
+                body.append('password', password);
+                const res = await fetch('/auth/login', { method: 'POST', headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString() });
+                if (!res.ok) { const err = await res.json(); throw new Error(err.detail || 'Login failed'); }
+                const data = await res.json();
+                setToken(data.access_token);
+                signinModal.style.display = 'none';
+                await renderHeaderAuth();
+                alert('Signed in successfully.');
+            } catch (err) {
+                alert(err.message || 'Sign in failed');
+            }
+        });
+    }
+
+    // Click outside to close auth modals
+    window.addEventListener('click', (evt) => {
+        if (evt.target === signinModal) signinModal.style.display = 'none';
+        if (evt.target === signupModal) signupModal.style.display = 'none';
+    });
+}
+
+// Attach initial auth events and check existing login state
+document.addEventListener('DOMContentLoaded', function() {
+    renderHeaderAuth();
+});
+

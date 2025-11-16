@@ -1,4 +1,4 @@
-# Job Aggregator Website
+# APPLY N HIRE Website
 
 A modern, responsive job aggregator website built with HTML, CSS, and vanilla JavaScript. This application allows users to search and filter job listings across various categories, locations, and employment types.
 
@@ -18,22 +18,10 @@ The website includes 12 sample job listings across different industries:
 - Technology (Frontend, Backend, Full Stack, DevOps, Mobile)
 - Design (UX/UI)
 - Marketing (Marketing Manager, Content Writer)
-- Sales (Sales Executive)
-- Finance (Financial Analyst)
-
-## Getting Started
-
-### Prerequisites
-
 No special prerequisites needed! Just a modern web browser.
 
 ### Installation
-
-1. Clone or download this repository:
-```bash
-git clone https://github.com/KenTheGreat19/Project-1.1.git
-cd Project-1.1
-```
+This website includes 12 sample job listings across different industries:
 
 2. Open `index.html` in your web browser:
 ```bash

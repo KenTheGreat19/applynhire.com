@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Aggregator - Find Your Dream Job</title>
+        <title>APPLY N HIRE - Apply Job and Hire Talent for Free!</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,9 +12,15 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <h1><i class="fas fa-briefcase"></i> Job Aggregator</h1>
-                <p class="tagline">Your one-stop destination for job opportunities</p>
-                <a href="admin.html" class="admin-link"><i class="fas fa-cog"></i> Admin Dashboard</a>
+                <div class="branding">
+                    <h1><i class="fas fa-user-tie"></i> APPLY N HIRE</h1>
+                    <p class="tagline">Apply Job and Hire Talent for Free!</p>
+                </div>
+                <div class="header-actions">
+                    <a href="admin.html" class="admin-link"><i class="fas fa-cog"></i> Admin Dashboard</a>
+                    <button id="signInBtn" class="btn btn-outline">Sign In</button>
+                    <button id="signUpBtn" class="btn btn-primary">Sign Up</button>
+                </div>
             </div>
         </div>
     </header>
@@ -92,9 +98,58 @@
         </div>
     </div>
 
+    <!-- Sign Up Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="signupClose">&times;</span>
+            <h2>Create an account</h2>
+            <form id="signupForm">
+                <div class="form-row">
+                    <input id="signupFirstName" type="text" placeholder="First name" required />
+                    <input id="signupLastName" type="text" placeholder="Last name" required />
+                </div>
+                <div class="form-row">
+                    <input id="signupEmail" type="email" placeholder="Email" required />
+                </div>
+                <div class="form-row">
+                    <input id="signupPassword" type="password" placeholder="Password" required />
+                    <input id="signupConfirm" type="password" placeholder="Confirm password" required />
+                </div>
+                <div class="form-row">
+                    <label><input type="radio" name="role" value="applicant" checked /> Applicant</label>
+                    <label><input type="radio" name="role" value="employer" /> Employer</label>
+                </div>
+                <div class="form-row">
+                    <button class="btn btn-primary" type="submit">Create account</button>
+                </div>
+                <p>Already on APPLY N HIRE? <a href="#" id="openSignInFromSignUp">Sign in</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div id="signinModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="signinClose">&times;</span>
+            <h2>Sign in</h2>
+            <form id="signinForm">
+                <div class="form-row">
+                    <input id="signinEmail" type="email" placeholder="Email" required />
+                </div>
+                <div class="form-row">
+                    <input id="signinPassword" type="password" placeholder="Password" required />
+                </div>
+                <div class="form-row">
+                    <button class="btn btn-primary" type="submit">Sign in</button>
+                </div>
+                <p>Need an account? <a href="#" id="openSignUpFromSignIn">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
-            <p>&copy; 2025 Job Aggregator. All rights reserved.</p>
+            <p>&copy; 2025 APPLY N HIRE. All rights reserved. | <a href="https://applynhire.com" target="_blank">applynhire.com</a></p>
         </div>
     </footer>
 
