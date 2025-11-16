@@ -445,7 +445,17 @@ function showJobDetail(job) {
 
 // Apply for job (placeholder function)
 function applyForJob(jobId) {
-    alert(`Application process for job ID ${jobId} would be initiated here. In a real application, this would redirect to an application form or external website.`);
+    const sessionRaw = localStorage.getItem('jobAggregatorSession');
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    if (!session) {
+        const goToAuth = confirm('You need to be signed in to apply. Sign in now?');
+        if (goToAuth) {
+            window.location.href = 'signin.html';
+        }
+        return;
+    }
+
+    alert(`Application process for job ID ${jobId} would be initiated here. You are signed in as ${session.email} (${session.role}).`);
 }
 
 // Filter jobs based on search and filters

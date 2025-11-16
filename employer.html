@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Dashboard - Job Aggregator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-row">
+            <div class="brand">
+                <a class="site-logo" href="index.html"><i class="fas fa-building"></i> Employer Dashboard</a>
+                <p class="tagline">Manage job postings and applicants</p>
+            </div>
+            <div class="right-nav"><nav class="auth-nav"></nav></div>
+        </div>
+    </header>
+
+    <main class="container profile-page">
+        <div class="profile-card">
+            <h2 id="welcome">Hello, Employer</h2>
+            <p id="email"></p>
+            <p id="role"></p>
+            <p>Post jobs, view applicants, and manage listings from here.</p>
+            <button id="signOutBtn" class="secondary-btn">Sign Out</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Job Aggregator.</p>
+        </div>
+    </footer>
+
+    <script src="siteAuth.js"></script>
+    <script src="header.js"></script>
+    <script>
+        // Basic session check
+        function getSession() {
+            const raw = localStorage.getItem('jobAggregatorSession');
+            return raw ? JSON.parse(raw) : null;
+        }
+
+        const session = getSession();
+        if (!session || session.role !== 'employer') {
+            alert('You are not signed in as an employer. Redirecting to Sign In.');
+            location.href = 'signin.html';
+        } else {
+            document.getElementById('welcome').textContent = `Hello, ${session.name || 'Employer'}`;
+            document.getElementById('email').textContent = session.email;
+            document.getElementById('role').textContent = `Role: ${session.role}`;
+        }
+
+        document.getElementById('signOutBtn').addEventListener('click', () => {
+            localStorage.removeItem('jobAggregatorSession');
+            location.href = 'signin.html';
+        });
+    </script>
+</body>
+</html>

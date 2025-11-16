@@ -49,6 +49,21 @@ start index.html
 
 Or simply double-click the `index.html` file.
 
+### Auth Demo
+
+There is a client-side sign in / sign up demo available. It stores demo accounts in `localStorage` and redirects based on the chosen role.
+
+ - Open `signin.html` to access Sign In or `signup.html` to create a new account.
+ - For employers, use `employer-signin.html` and `employer-signup.html` to sign in/up specifically for employer accounts.
+ - After signing in or signing up, you'll be redirected to `applicant.html` or `employer.html` depending on the role created.
+
+### Responsive header
+
+- The header now has a compact layout: the logo is flush to the left and the auth links (Sign in / Sign up / Employer site) appear on the right as a button and links.
+- On small screens, the auth links collapse into a dropdown menu accessible via a hamburger toggle. This keeps the header compact while preserving the links.
+
+Note: This is a frontend-only demo for educational purposes; do not rely on it for production authentication.
+
 ### Running with a Local Server (Optional)
 
 For a better development experience, you can use a local server:
@@ -81,6 +96,18 @@ Project-1.1/
 ├── index.html      # Main HTML structure
 ├── styles.css      # All styling and responsive design
 ├── script.js       # JavaScript functionality and job data
+├── signin.html      # Sign in page
+├── signup.html      # Sign up page
+├── employer-signin.html # Employer sign in page (role-locked)
+├── employer-signup.html # Employer sign up page (role-locked)
+├── auth-common.js   # Shared auth helpers (session, hashing etc.) - demo only
+├── signin.js        # Sign in logic (client-only demo)
+├── signup.js        # Sign up logic (client-only demo)
+├── employer-signin.js # Employer sign-in logic (role-locked)
+├── employer-signup.js # Employer sign-up logic (role-locked)
+├── applicant.html   # Applicant dashboard (role-based page)
+├── employer.html    # Employer dashboard (role-based page)
+├── siteAuth.js      # Small script to show sign-in/sign-out in header
 └── README.md       # This file
 ```
 
