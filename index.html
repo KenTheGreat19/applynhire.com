@@ -14,18 +14,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container header-row">
-            <div class="brand">
-                <a class="site-logo" href="index.html">
-                    <img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE">
-                    APPLY N HIRE
-                </a>
-                <p class="tagline">Apply Job and Hire Talent for Free!</p>
-            </div>
-            <div class="right-nav">
-                <nav class="auth-nav"></nav>
-                <button class="mobile-menu-toggle"><i class="fas fa-bars"></i></button>
+<header class="site-header">
+    <div class="container header-row">
+        <div class="brand">
+            <a class="site-logo" href="index.html">
+                <img class="site-logo-img"
+                     src="vendor/images/logo.png"
+                     onerror="this.onerror=null;this.src='vendor/images/logo.svg'"
+                     alt="APPLY N HIRE">
+                <span class="site-title">APPLY N HIRE</span>
+            </a>
+            <p class="tagline">Apply Job and Hire Talent for Free!</p>
+        </div>
+
+        <div class="right-nav">
+            <nav class="auth-nav" aria-label="Authentication Navigation">
+                <!-- auth links go here -->
+            </nav>
+
+            <a href="admin.html" class="admin-link" title="Admin Dashboard" aria-label="Admin Dashboard">
+                <i class="fas fa-cog" aria-hidden="true"></i>
+                <span class="admin-text">Admin Dashboard</span>
+            </a>
+        </div>
+    </div>
+</header>
             </div>
         </div>
     </header>
