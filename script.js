@@ -1,5 +1,24 @@
-// Sample job data - In production, this would come from an API
-window.jobsData = [
+/* Deprecated: main job logic moved to site/script.js
+   If you are developing, use site/script.js instead.
+   Sample job data - In production, this would come from an API
+*/
+const jobsData = [
+  // Example job entries — replace or load from your API when ready
+  {
+    id: 1,
+    title: "Frontend Developer",
+    company: "Acme Corp",
+    location: "Remote",
+    postedAt: "2025-11-15",
+    description: "Build responsive UIs with HTML, CSS and JavaScript.",
+    applyUrl: "https://acme.example/jobs/1"
+  }
+];
+
+// Expose to the global scope for pages that expect window.jobsData
+if (typeof window !== "undefined") {
+  window.jobsData = jobsData;
+}
     {
         id: 1,
         title: "Senior Frontend Developer",
@@ -816,7 +835,17 @@ function showJobDetail(job) {
 
 // Apply for job (placeholder function)
 function applyForJob(jobId) {
-    alert(`Application process for job ID ${jobId} would be initiated here. In a real application, this would redirect to an application form or external website.`);
+    const sessionRaw = localStorage.getItem('applynhireSession');
+    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
+    if (!session) {
+        const goToAuth = confirm('You need to be signed in to apply. Sign in now?');
+        if (goToAuth) {
+            window.location.href = 'signin.html';
+        }
+        return;
+    }
+
+    alert(`Application process for job ID ${jobId} would be initiated here. You are signed in as ${session.email} (${session.role}).`);
 }
 
 // Filter jobs based on search and filters

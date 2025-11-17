@@ -3,48 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Aggregator - Find Your Dream Job</title>
-    <link rel="stylesheet" href="vendor/leaflet.css" />
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>APPLY N HIRE - Apply Job and Hire Talent for Free!</title>
+    <meta name="description" content="Apply Job and Hire Talent for Free! - APPLY N HIRE (applynhire.com)">
+    <meta property="og:title" content="APPLY N HIRE - Apply Job and Hire Talent for Free!">
+    <meta property="og:site_name" content="APPLY N HIRE">
+    <meta property="og:description" content="Apply Job and Hire Talent for Free!">
+    <link rel="stylesheet" href="vendor/leaflet.css">
+    <link rel="stylesheet" href="site/styles.css">
+    <link rel="icon" href="vendor/images/logo.png" type="image/png">
+    <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <h1><i class="fas fa-briefcase"></i> Job Aggregator</h1>
-                <p class="tagline">Your one-stop destination for job opportunities</p>
-                <a href="admin.html" class="admin-link"><i class="fas fa-cog"></i> Admin Dashboard</a>
+<header class="site-header">
+    <div class="container header-row">
+        <div class="brand">
+            <a class="site-logo" href="index.html">
+                <img class="site-logo-img"
+                     src="vendor/images/logo.png"
+                     onerror="this.onerror=null;this.src='vendor/images/logo.svg'"
+                     alt="APPLY N HIRE">
+                <span class="site-title">APPLY N HIRE</span>
+            </a>
+            <p class="tagline">Apply Job and Hire Talent for Free!</p>
+        </div>
+
+        <div class="right-nav">
+            <nav class="auth-nav" aria-label="Authentication Navigation">
+                <!-- auth links go here -->
+            </nav>
+
+            <a href="admin.html" class="admin-link" title="Admin Dashboard" aria-label="Admin Dashboard">
+                <i class="fas fa-cog" aria-hidden="true"></i>
+                <span class="admin-text">Admin Dashboard</span>
+            </a>
+        </div>
+    </div>
+</header>
             </div>
         </div>
     </header>
 
     <main class="container">
-        <!-- Search Section -->
+        <!-- Hero Search Section -->
         <section class="search-section">
             <div class="search-box">
                 <div class="search-input-group">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search job titles, keywords...">
+                    <input type="text" id="searchInput" placeholder="Search job titles, keywords, or company names...">
                 </div>
                 <div class="filter-group">
                     <select id="locationFilter">
-                        <option value="">All Locations</option>
-                        <option value="remote">Remote</option>
+                        <option value="">📍 All Locations</option>
+                        <option value="remote">🌍 Remote</option>
                         <option value="new-york">New York</option>
                         <option value="san-francisco">San Francisco</option>
                         <option value="london">London</option>
                         <option value="berlin">Berlin</option>
                     </select>
                     <select id="typeFilter">
-                        <option value="">All Types</option>
+                        <option value="">⏰ All Types</option>
                         <option value="full-time">Full Time</option>
                         <option value="part-time">Part Time</option>
                         <option value="contract">Contract</option>
                         <option value="internship">Internship</option>
                     </select>
                     <select id="categoryFilter">
-                        <option value="">All Categories</option>
+                        <option value="">💼 All Categories</option>
                         <option value="technology">Technology</option>
                         <option value="design">Design</option>
                         <option value="marketing">Marketing</option>
@@ -55,7 +82,9 @@
             </div>
             <div class="results-info">
                 <span id="resultsCount">0 jobs found</span>
-                <button id="clearFilters" class="clear-btn">Clear Filters</button>
+                <button id="clearFilters" class="clear-btn">
+                    <i class="fas fa-redo"></i> Clear Filters
+                </button>
             </div>
         </section>
 
@@ -73,7 +102,7 @@
             <div id="noResults" class="no-results" style="display: none;">
                 <i class="fas fa-search"></i>
                 <h3>No jobs found</h3>
-                <p>Try adjusting your search criteria</p>
+                <p>Try adjusting your search criteria or browse all available positions</p>
             </div>
             <div id="loading" class="loading" style="display: none;">
                 <i class="fas fa-spinner fa-spin"></i>
@@ -94,11 +123,18 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 Job Aggregator. All rights reserved.</p>
+            <p>&copy; 2025 APPLY N HIRE. All rights reserved. | applynhire.com</p>
         </div>
     </footer>
 
-    <script src="vendor/leaflet.js"></script>
-    <script src="script.js"></script>
+<script>
+  // Redirect to the new site/ location (preserves main branch intent).
+  // If you prefer to load the local map scripts directly instead of redirecting,
+  // tell me and I'll restore vendor/leaflet.js and script.js instead.
+  window.location.href = 'site/index.html';
+</script>
+<noscript>
+  <a href="site/index.html">Continue to site/index.html (JavaScript is required for automatic redirect)</a>
+</noscript>
 </body>
 </html>

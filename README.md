@@ -1,6 +1,6 @@
-# Job Aggregator Website
+# APPLY N HIRE Website
 
-A modern, responsive job aggregator website built with HTML, CSS, and vanilla JavaScript. This application allows users to search and filter job listings across various categories, locations, and employment types.
+A modern, responsive job platform—APPLY N HIRE—where users can apply for jobs and employers can hire talent for free. This application allows users to search and filter job listings across various categories, locations, and employment types.
 
 ## Features
 
@@ -35,19 +35,34 @@ git clone https://github.com/KenTheGreat19/Project-1.1.git
 cd Project-1.1
 ```
 
-2. Open `index.html` in your web browser:
+2. Open `site/index.html` in your web browser (root `index.html` redirects here):
 ```bash
 # On Linux
-xdg-open index.html
+xdg-open site/index.html
 
 # On macOS
-open index.html
+open site/index.html
 
 # On Windows
-start index.html
+start site/index.html
 ```
 
 Or simply double-click the `index.html` file.
+
+### Auth Demo
+
+There is a client-side sign in / sign up demo available. It stores demo accounts in `localStorage` and redirects based on the chosen role.
+
+ - Open `signin.html` to access Sign In or `signup.html` to create a new account.
+ - For employers, use `employer-signin.html` and `employer-signup.html` to sign in/up specifically for employer accounts.
+ - After signing in or signing up, you'll be redirected to `applicant.html` or `employer.html` depending on the role created.
+
+### Responsive header
+
+- The header now has a compact layout: the logo is flush to the left and the auth links (Sign in / Sign up / Employer site) appear on the right as a button and links.
+- On small screens, the auth links collapse into a dropdown menu accessible via a hamburger toggle. This keeps the header compact while preserving the links.
+
+Note: This is a frontend-only demo for educational purposes; do not rely on it for production authentication.
 
 ### Running with a Local Server (Optional)
 
@@ -78,11 +93,68 @@ Then open your browser and navigate to `http://localhost:8000`
 
 ```
 Project-1.1/
-├── index.html      # Main HTML structure
-├── styles.css      # All styling and responsive design
-├── script.js       # JavaScript functionality and job data
-└── README.md       # This file
+├── site/            # All website content (HTML/CSS/JS)
+│   ├── index.html
+│   ├── styles.css
+│   ├── script.js
+│   ├── signin.html
+│   ├── signup.html
+│   ├── employer-signin.html
+│   ├── employer-signup.html
+│   ├── auth-common.js
+│   ├── auth-forms.js   # Consolidated sign-in/up logic replacing signin.js, signup.js, employer-* files
+│   ├── applicant.html
+│   ├── employer.html
+│   └── siteAuth.js
+├── README.md         # This file
+└── tests/            # Unit/integration tests
 ```
+
+## Migration Notes
+
+- The primary site files (HTML/CSS/JS) were moved into the `site/` directory for better organization.
+- A consolidated auth script (`site/auth-forms.js`) replaces the multiple per-page auth scripts to reduce duplication.
+- Root HTML files now redirect to `site/` equivalents to retain backward compatibility while keeping the project structure tidy.
+- Legacy root JS files are kept for reference but should not be used; new code runs from under `site/`.
+
+Branding and LocalStorage migration
+---------------------------------
+
+- The project has been rebranded to **APPLY N HIRE**: the UI labels, titles, and footers reflect this change.
+- LocalStorage keys previously used in this demo (`jobAggregatorAccounts`, `jobAggregatorSession`) were renamed to `applynhireAccounts` and `applynhireSession` and a migration fallback has been added to `site/auth-common.js` and `auth.js` to automatically copy old values to the new keys at runtime.
+
+Updating the site logo
+----------------------
+
+The repo contains a placeholder SVG logo at `site/vendor/images/logo.svg` and `vendor/images/logo.svg`, and the HTML is set up to use a PNG in `vendor/images/logo.png` if present with a fallback to the SVG. To replace the placeholder with the image you attached:
+
+1. Run the PowerShell helper to copy your PNG into the site and root vendor folders (run from repository root):
+
+```powershell
+.\scripts\replace-logo.ps1 -SourcePath C:\path\to\your\logo.png
+```
+
+2. Optionally, create a favicon using ImageMagick (the script attempts to do this automatically if `convert` is available).
+
+3. Commit the images if you want them in version control. If you prefer we can add them for you in a PR.
+
+## Backend (Optional)
+
+This repository now includes a minimal FastAPI backend in `backend/` with basic authentication endpoints (signup/signin/profile). It's optional — the frontend continues to work without it since client-only auth is present for demo purposes.
+
+To run the backend (developer mode):
+
+```powershell
+cd backend
+python -m venv .venv; .\.venv\Scripts\Activate; pip install -r requirements.txt
+$env:JWT_SECRET='replace-with-a-strong-secret'; uvicorn backend.app:app --reload --host 127.0.0.1 --port 8000
+```
+
+Open http://127.0.0.1:8000/docs for API docs when the server is running.
+
+When the backend is running, the client-side sign-in and sign-up will send requests to `http://127.0.0.1:8000/api` endpoints instead of using localStorage.
+
+
 
 ## Features Breakdown
 
@@ -206,6 +278,11 @@ Modify CSS variables in `styles.css`:
 
 Potential features to add:
 - [ ] Backend API integration
+
+API Integration
+---------------
+This repository now includes a minimal FastAPI backend at `backend/` which serves authentication and jobs endpoints. The website's main job listing page (`site/index.html`) will attempt to fetch jobs from `http://127.0.0.1:8000/api/jobs` when available; otherwise it falls back to local demo data in `site/script.js`.
+
 - [ ] User authentication and saved jobs
 - [ ] Job application tracking
 - [ ] Email alerts for new jobs
