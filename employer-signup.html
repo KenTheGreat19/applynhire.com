@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url=site/employer-signup.html">
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    Redirecting to <a href="site/employer-signup.html">site/employer-signup.html</a>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Sign Up - APPLY N HIRE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="robots" content="noindex" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-row">
+            <div class="brand">
+                <a class="site-logo" href="index.html"><img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE - Employer"> APPLY N HIRE - Employer</a>
+                <p class="tagline">Employer Sign Up</p>
+            </div>
+            <div class="right-nav"><nav class="auth-nav"></nav></div>
+        </div>
+    </header>
+
+    <main class="container auth-page">
+        <div class="auth-card">
+            <div id="message" class="auth-message"></div>
+            <form id="signUpForm" class="auth-form">
+                <label for="signupName">Company / Account Name</label>
+                <input id="signupName" type="text" placeholder="Company, e.g., Acme Inc." required>
+
+                <label for="signupEmail">Email</label>
+                <input id="signupEmail" type="email" placeholder="you@company.com" required>
+
+                <label for="signupPassword">Password</label>
+                <input id="signupPassword" type="password" placeholder="Password" required>
+
+                <label for="signupPasswordConfirm">Confirm Password</label>
+                <input id="signupPasswordConfirm" type="password" placeholder="Confirm password" required>
+
+                <!-- Role locked to employer for this page -->
+                <input type="hidden" id="signupRole" value="employer">
+
+                <button type="submit" class="primary-btn">Create employer account</button>
+                <p class="form-note">Already have an employer account? <a href="employer-signin.html">Sign In</a></p>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 APPLY N HIRE. | applynhire.com</p>
+        </div>
+    </footer>
+
+    <script>window.location.href = 'site/employer-signup.html';</script>
+</body>
+</html>

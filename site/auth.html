@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth - APPLY N HIRE</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="vendor/images/logo.png" type="image/png">
+    <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <header class="site-header">
+        <div class="container header-row">
+            <div class="brand">
+                <a class="site-logo" href="index.html"><img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE"> APPLY N HIRE</a>
+                <p class="tagline">Sign in or sign up to continue</p>
+            </div>
+            <div class="right-nav"><nav class="auth-nav"></nav></div>
+        </div>
+    </header>
+    </header>
+
+    <main class="container auth-page">
+        <div class="auth-card" style="text-align:center;">
+            <p class="form-note">This page now redirects to Sign In. If you are not redirected automatically, <a href="signin.html">click here to sign in</a>.</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 APPLY N HIRE. | applynhire.com</p>
+        </div>
+    </footer>
+
+    <script src="siteAuth.js"></script>
+    <script src="header.js"></script>
+    <script>
+        // Keep `auth.html` as a redirect to the new sign-in page for backward compatibility
+        setTimeout(() => { window.location.href = 'signin.html'; }, 200);
+    </script>
+</body>
+</html>
