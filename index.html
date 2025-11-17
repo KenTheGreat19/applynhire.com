@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>APPLY N HIRE - Apply Job and Hire Talent for Free!</title>
     <meta name="description" content="Apply Job and Hire Talent for Free! - APPLY N HIRE (applynhire.com)">
     <meta property="og:title" content="APPLY N HIRE - Apply Job and Hire Talent for Free!">
     <meta property="og:site_name" content="APPLY N HIRE">
     <meta property="og:description" content="Apply Job and Hire Talent for Free!">
+    <link rel="stylesheet" href="vendor/leaflet.css">
     <link rel="stylesheet" href="site/styles.css">
     <link rel="icon" href="vendor/images/logo.png" type="image/png">
     <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
@@ -85,6 +88,12 @@
             </div>
         </section>
 
+        <!-- World Map Section -->
+        <section class="map-section">
+            <div id="jobMap" class="map-container"></div>
+            <h2>Job Locations Worldwide</h2>
+        </section>
+
         <!-- Job Listings -->
         <section class="jobs-section">
             <div id="jobsList" class="jobs-grid">
@@ -118,6 +127,14 @@
         </div>
     </footer>
 
-    <script>window.location.href = 'site/index.html';</script>
+<script>
+  // Redirect to the new site/ location (preserves main branch intent).
+  // If you prefer to load the local map scripts directly instead of redirecting,
+  // tell me and I'll restore vendor/leaflet.js and script.js instead.
+  window.location.href = 'site/index.html';
+</script>
+<noscript>
+  <a href="site/index.html">Continue to site/index.html (JavaScript is required for automatic redirect)</a>
+</noscript>
 </body>
 </html>

@@ -323,10 +323,383 @@ const loading = document.getElementById('loading');
 const modal = document.getElementById('jobModal');
 const closeModal = document.getElementsByClassName('close')[0];
 
+// Initialize the world map
+function initMap() {
+    const mapContainer = document.getElementById('jobMap');
+    if (!mapContainer) {
+        console.error('Map container not found');
+        return;
+    }
+
+    // If Leaflet isn't available, try dynamically loading it from a CDN as a fallback
+    if (typeof L === 'undefined') {
+        console.warn('Leaflet not detected. Attempting to load from CDN...');
+        const jsCdn = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js';
+        const cssCdn = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css';
+        // Load CSS if not present
+        if (!document.querySelector('link[href*="leaflet"]')) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = cssCdn;
+            document.head.appendChild(link);
+        }
+
+        // Try loading Leaflet script
+        loadScript(jsCdn, 5000)
+            .then(() => {
+                console.log('Leaflet loaded dynamically.');
+                renderLeafletMap(mapContainer);
+            })
+            .catch(err => {
+                console.error('Failed to load Leaflet dynamically:', err);
+                mapContainer.innerHTML = '<p style="text-align:center;padding:1rem;">Map failed to load. Please refresh the page and check network connectivity.</p>';
+            });
+        return;
+    }
+
+    renderLeafletMap(mapContainer);
+}
+
+// Utility to dynamically load a script with a timeout
+function loadScript(src, timeoutMs = 10000) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('Script failed to load: ' + src));
+        document.head.appendChild(script);
+
+        if (timeoutMs) {
+            setTimeout(() => reject(new Error('Script load timeout: ' + src)), timeoutMs);
+        }
+    });
+}
+
+function renderLeafletMap(container) {
+    container.innerHTML = '';
+
+    const mapCanvas = document.createElement('div');
+    mapCanvas.style.height = '100%';
+    mapCanvas.style.width = '100%';
+    mapCanvas.className = 'leaflet-map-wrapper';
+    container.appendChild(mapCanvas);
+
+    const map = L.map(mapCanvas, {
+        zoomControl: true,
+        worldCopyJump: true
+    }).setView([25, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const jobsByLocation = groupJobsByLocation(window.jobsData);
+    const locationCoords = getLocationCoordinates();
+    const bounds = [];
+
+    Object.entries(jobsByLocation).forEach(([location, jobs]) => {
+        const coords = locationCoords[location];
+        if (!coords) {
+            console.warn(`Missing coordinates for location: ${location}`);
+            return;
+        }
+
+        const markerOptions = location === 'Remote' ? {
+            icon: L.divIcon({
+                className: 'remote-icon',
+                html: '<span>R</span>',
+                iconSize: [28, 28],
+                iconAnchor: [14, 14]
+            })
+        } : {};
+
+        const marker = L.marker(coords, markerOptions).addTo(map);
+        marker.bindPopup(createPopupContent(location, jobs));
+        marker.on('popupopen', (event) => attachPopupFilter(event, location));
+        marker.on('click', () => filterJobsByLocation(location));
+
+        bounds.push(coords);
+    });
+
+    if (bounds.length > 0) {
+        map.fitBounds(bounds, { padding: [30, 30], maxZoom: 4 });
+    }
+
+    map.once('load', () => map.invalidateSize());
+
+    appendMapLegend(container);
+
+    // Expose map on container so toggle function can access it
+    try { container._leafletMap = map; window._currentLeafletMap = map; } catch (e) {}
+}
+
+function groupJobsByLocation(jobs) {
+    return jobs.reduce((acc, job) => {
+        const location = job.location || 'Remote';
+        if (!acc[location]) {
+            acc[location] = [];
+        }
+        acc[location].push(job);
+        return acc;
+    }, {});
+}
+
+function getLocationCoordinates() {
+    return {
+        'San Francisco': [37.7749, -122.4194],
+        'New York': [40.7128, -74.0060],
+        'London': [51.5074, -0.1278],
+        'Berlin': [52.52, 13.405],
+        'Remote': [0, 0]
+    };
+}
+
+function createPopupContent(location, jobs) {
+    const limitedJobs = jobs.slice(0, 4);
+    const remaining = jobs.length - limitedJobs.length;
+    const jobItems = limitedJobs.map(job => `<li>${job.title} &mdash; ${job.company}</li>`).join('');
+
+    return `
+        <div class="map-popup">
+            <strong>${location}</strong><br/>
+            ${jobs.length} job${jobs.length !== 1 ? 's' : ''}
+            <ul>${jobItems}</ul>
+            ${remaining > 0 ? `<em>+${remaining} more</em>` : ''}
+            <button type="button" class="map-popup-action">View roles</button>
+        </div>
+    `;
+}
+
+function attachPopupFilter(event, location) {
+    const popupEl = event.popup.getElement();
+    if (!popupEl) return;
+    const actionBtn = popupEl.querySelector('.map-popup-action');
+    if (!actionBtn) return;
+
+    actionBtn.onclick = (btnEvent) => {
+        btnEvent.preventDefault();
+        filterJobsByLocation(location);
+        event.popup.close();
+    };
+}
+
+function appendMapLegend(container) {
+    // Keep the UI minimal: do not append a legend. Only show fullscreen control.
+
+    // Append a fullscreen toggle button on the map container (top-right overlay)
+    const fullscreenBtn = document.createElement('button');
+    fullscreenBtn.className = 'map-fullscreen-btn';
+    fullscreenBtn.setAttribute('aria-label', 'Toggle full screen');
+    fullscreenBtn.setAttribute('title', 'Toggle full screen');
+    fullscreenBtn.innerHTML = '<span class="icon">⛶</span><span class="label">Full Screen</span>';
+    // create event listener
+    fullscreenBtn.addEventListener('click', () => {
+        const mapSection = container.closest('.map-section');
+        if (!mapSection) return;
+        toggleMapFullscreen(mapSection);
+    });
+    // ensure only one button exists
+    const existingBtn = container.querySelector('.map-fullscreen-btn');
+    if (existingBtn) existingBtn.remove();
+    container.appendChild(fullscreenBtn);
+}
+
+function toggleMapFullscreen(section) {
+    const container = section.querySelector('.map-container');
+    if (!container) return;
+    const map = container._leafletMap || window._currentLeafletMap;
+    const btn = section.querySelector('.map-fullscreen-btn');
+
+    // If the browser supports the native Fullscreen API, try to use it.
+    // cross-browser check for native Fullscreen API support
+    const canUseNativeFullscreen = !!( (section.requestFullscreen || section.webkitRequestFullscreen || section.msRequestFullscreen) && (document.fullscreenEnabled || document.webkitIsFullScreen === true || document.msFullscreenElement) );
+
+    const isCurrentlyFullscreen = document.fullscreenElement === section || section.classList.contains('fullscreen');
+
+    if (canUseNativeFullscreen) {
+        if (!isCurrentlyFullscreen) {
+            // Save scroll position and then request native fullscreen
+            section._previousScroll = window.pageYOffset || document.documentElement.scrollTop;
+            requestFullscreenCompat(section).catch(err => {
+                // If native request is denied, fallback to overlay mode
+                console.warn('Native fullscreen request failed, falling back to overlay fullscreen.', err);
+                enterOverlayFullscreen(section, btn);
+            });
+        } else {
+            // Exit native fullscreen
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                exitFullscreenCompat().catch(err => {
+                    console.warn('Error exiting fullscreen, toggling overlay fallback instead.', err);
+                    exitOverlayFullscreen(section, btn);
+                });
+            } else {
+                exitOverlayFullscreen(section, btn);
+            }
+        }
+    } else {
+        // No native support, toggle overlay fullscreen
+        const ENTERED = section.classList.toggle('fullscreen');
+        if (ENTERED) enterOverlayFullscreen(section, btn); else exitOverlayFullscreen(section, btn);
+    }
+}
+
+/* Cross-browser helper for requesting fullscreen; returns a Promise-like object
+   that resolves for modern browsers or via immediate resolve for prefixed calls. */
+function requestFullscreenCompat(element) {
+    if (element.requestFullscreen) {
+        return element.requestFullscreen();
+    }
+    if (element.webkitRequestFullscreen) {
+        // Safari iOS/older may not return a Promise, so wrap
+        return new Promise((resolve, reject) => {
+            try { element.webkitRequestFullscreen(); resolve(); } catch (e) { reject(e); }
+        });
+    }
+    if (element.msRequestFullscreen) {
+        return new Promise((resolve, reject) => {
+            try { element.msRequestFullscreen(); resolve(); } catch (e) { reject(e); }
+        });
+    }
+    return Promise.reject(new Error('Fullscreen API is not supported on this element'));
+}
+
+function exitFullscreenCompat() {
+    if (document.exitFullscreen) return document.exitFullscreen();
+    if (document.webkitExitFullscreen) return new Promise((resolve, reject) => { try { document.webkitExitFullscreen(); resolve(); } catch (e) { reject(e); } });
+    if (document.msExitFullscreen) return new Promise((resolve, reject) => { try { document.msExitFullscreen(); resolve(); } catch (e) { reject(e); } });
+    return Promise.reject(new Error('Exit fullscreen is not supported on this document'));
+}
+
+function enterOverlayFullscreen(section, btn) {
+    const container = section.querySelector('.map-container');
+    section.classList.add('fullscreen');
+    document.body.classList.add('map-fullscreen-active');
+    // remember scroll position
+    section._previousScroll = window.pageYOffset || document.documentElement.scrollTop;
+    document.body.style.overflow = 'hidden';
+    if (btn) {
+        btn.querySelector('.label').textContent = 'Exit Full Screen';
+        btn.setAttribute('aria-pressed', 'true');
+    }
+    // Ensure map is resized
+    const map = container._leafletMap || window._currentLeafletMap;
+    setTimeout(() => { try { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); } catch (e) { console.warn('Error invalidating map size on enterOverlayFullscreen', e); } }, 200);
+}
+
+function exitOverlayFullscreen(section, btn) {
+    const container = section.querySelector('.map-container');
+    section.classList.remove('fullscreen');
+    document.body.classList.remove('map-fullscreen-active');
+    document.body.style.overflow = '';
+    if (section._previousScroll != null) window.scrollTo(0, section._previousScroll);
+    if (btn) {
+        btn.querySelector('.label').textContent = 'Full Screen';
+        btn.setAttribute('aria-pressed', 'false');
+    }
+    // Ensure map is resized
+    const map = container._leafletMap || window._currentLeafletMap;
+    setTimeout(() => { try { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); } catch (e) { console.warn('Error invalidating map size on exitOverlayFullscreen', e); } }, 200);
+}
+
+// Listen for Escape key to exit fullscreen
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        // If native fullscreen is active, exit it first
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+            return;
+        }
+
+        const active = document.querySelector('.map-section.fullscreen');
+        if (active) toggleMapFullscreen(active);
+    }
+});
+
+// Listen for native fullscreen change events to update UI and map size
+function _handleFullscreenChange() {
+    const fsElem = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    if (fsElem && fsElem.classList && fsElem.classList.contains('map-section')) {
+        // Entered native fullscreen for a map section
+        fsElem.classList.add('fullscreen');
+        document.body.classList.add('map-fullscreen-active');
+        // update button text if present
+        const btn = fsElem.querySelector('.map-fullscreen-btn');
+        if (btn) {
+            btn.querySelector('.label').textContent = 'Exit Full Screen';
+            btn.setAttribute('aria-pressed', 'true');
+        }
+        // invalidate map size
+        const container = fsElem.querySelector('.map-container');
+        const map = container && (container._leafletMap || window._currentLeafletMap);
+        setTimeout(() => {
+            try { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); } catch (e) { console.warn('Error invalidating map size on fullscreenchange enter', e); }
+        }, 200);
+    } else {
+        // Exited native fullscreen — remove classes globally
+        const active = document.querySelector('.map-section.fullscreen');
+        if (active) {
+            active.classList.remove('fullscreen');
+            if (active._previousScroll != null) window.scrollTo(0, active._previousScroll);
+        }
+        document.body.classList.remove('map-fullscreen-active');
+        document.body.style.overflow = '';
+        // Reset aria-pressed if we have a button inside the map-section
+        if (active) {
+            const btnActive = active.querySelector('.map-fullscreen-btn');
+            if (btnActive) btnActive.setAttribute('aria-pressed', 'false');
+        }
+        // Try to resize the current map
+        const container = document.querySelector('.map-container');
+        const map = container && (container._leafletMap || window._currentLeafletMap);
+        setTimeout(() => {
+            try { if (map && typeof map.invalidateSize === 'function') map.invalidateSize(); } catch (e) { console.warn('Error invalidating map size on fullscreenchange exit', e); }
+        }, 200);
+    }
+}
+
+document.addEventListener('fullscreenchange', _handleFullscreenChange);
+document.addEventListener('webkitfullscreenchange', _handleFullscreenChange);
+document.addEventListener('msfullscreenchange', _handleFullscreenChange);
+
+function filterJobsByLocation(location) {
+    // Update location filter
+    const locationFilter = document.getElementById('locationFilter');
+    let filterValue = '';
+    
+    switch(location) {
+        case 'Remote':
+            filterValue = 'remote';
+            break;
+        case 'New York':
+            filterValue = 'new-york';
+            break;
+        case 'San Francisco':
+            filterValue = 'san-francisco';
+            break;
+        case 'London':
+            filterValue = 'london';
+            break;
+        case 'Berlin':
+            filterValue = 'berlin';
+            break;
+    }
+    
+    locationFilter.value = filterValue;
+
+    // Trigger filter
+    filterJobs();
+
+    // Scroll to jobs section
+    document.querySelector('.jobs-section').scrollIntoView({ behavior: 'smooth' });
+}
+
 // Initialize the page
 function init() {
     renderJobs(window.jobsData);
     attachEventListeners();
+    // Initialize map after DOM elements are ready
+    setTimeout(initMap, 100);
 }
 
 // Render jobs to the page
