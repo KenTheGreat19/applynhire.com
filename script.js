@@ -1,575 +1,382 @@
-/* Deprecated: main job logic moved to site/script.js */
-/* If you are developing, use site/script.js instead. */
-const jobsData = [
+// ==================== DEMO JOB DATA ====================
+const demoJobs = [
     {
         id: 1,
-        title: "Senior Frontend Developer",
-        company: "TechCorp",
-        location: "San Francisco",
-        type: "full-time",
-        category: "technology",
-        salary: "$120k - $160k",
-        posted: "2 days ago",
-        description: "We're looking for an experienced Frontend Developer to join our dynamic team and help build cutting-edge web applications.",
-        requirements: [
-            "5+ years of experience with React.js",
-            "Strong knowledge of HTML, CSS, and JavaScript",
-            "Experience with modern frontend tools and workflows",
-            "Excellent problem-solving skills"
-        ],
-        responsibilities: [
-            "Develop and maintain web applications",
-            "Collaborate with design and backend teams",
-            "Write clean, maintainable code",
-            "Optimize applications for maximum performance"
-        ],
-        tags: ["React", "JavaScript", "CSS", "TypeScript"]
+        title: "Customer Experience Associate I - Healthcare Savings Non Voice",
+        company: "ANH Recruitment Manpower",
+        type: "Agency",
+        rating: 5.0,
+        reviews: 1,
+        workMode: "On-site",
+        location: "Manila, Capital District, Metro Manila, Philippines",
+        jobType: "Full Time",
+        salary: "$10K-$10K",
+        description: "Through our dedicated associates, Conduent delivers mission-critical services and solutions on behalf of Fortune 100 com...",
+        postedTime: "2 days ago",
+        views: 18,
+        applications: 0,
+        trending: true
     },
     {
         id: 2,
-        title: "UX/UI Designer",
-        company: "DesignHub",
-        location: "Remote",
-        type: "full-time",
-        category: "design",
-        salary: "$90k - $130k",
-        posted: "1 day ago",
-        description: "Join our creative team to design beautiful and intuitive user experiences for web and mobile applications.",
-        requirements: [
-            "3+ years of UX/UI design experience",
-            "Proficiency in Figma, Sketch, or Adobe XD",
-            "Strong portfolio demonstrating design skills",
-            "Understanding of user-centered design principles"
-        ],
-        responsibilities: [
-            "Create wireframes and prototypes",
-            "Conduct user research and usability testing",
-            "Design user interfaces for web and mobile",
-            "Collaborate with developers and stakeholders"
-        ],
-        tags: ["Figma", "UI Design", "UX Research", "Prototyping"]
-    },
-    {
-        id: 3,
-        title: "Full Stack Developer",
-        company: "StartupXYZ",
-        location: "New York",
-        type: "full-time",
-        category: "technology",
-        salary: "$100k - $150k",
-        posted: "3 days ago",
-        description: "Exciting opportunity to work on innovative products using modern technologies in a fast-paced startup environment.",
-        requirements: [
-            "Experience with Node.js and React",
-            "Knowledge of databases (SQL and NoSQL)",
-            "Understanding of RESTful APIs",
-            "Strong communication skills"
-        ],
-        responsibilities: [
-            "Build and maintain full-stack applications",
-            "Design and implement APIs",
-            "Work with database design and optimization",
-            "Participate in agile development processes"
-        ],
-        tags: ["Node.js", "React", "MongoDB", "Express"]
-    },
-    {
-        id: 4,
-        title: "Marketing Manager",
-        company: "GrowthCo",
-        location: "London",
-        type: "full-time",
-        category: "marketing",
-        salary: "£60k - £80k",
-        posted: "5 days ago",
-        description: "Lead our marketing efforts and help drive growth through innovative campaigns and strategies.",
-        requirements: [
-            "5+ years of marketing experience",
-            "Experience with digital marketing channels",
-            "Strong analytical and strategic thinking",
-            "Excellent written and verbal communication"
-        ],
-        responsibilities: [
-            "Develop and execute marketing strategies",
-            "Manage marketing campaigns across channels",
-            "Analyze campaign performance and ROI",
-            "Lead and mentor marketing team members"
-        ],
-        tags: ["Digital Marketing", "SEO", "Content Strategy", "Analytics"]
-    },
-    {
-        id: 5,
-        title: "DevOps Engineer",
-        company: "CloudSystems",
-        location: "Remote",
-        type: "contract",
-        category: "technology",
-        salary: "$130k - $170k",
-        posted: "1 week ago",
-        description: "Help us build and maintain scalable cloud infrastructure using modern DevOps practices.",
-        requirements: [
-            "Experience with AWS, Azure, or GCP",
-            "Strong knowledge of Docker and Kubernetes",
-            "Experience with CI/CD pipelines",
-            "Scripting skills (Python, Bash, etc.)"
-        ],
-        responsibilities: [
-            "Design and maintain cloud infrastructure",
-            "Implement CI/CD pipelines",
-            "Monitor system performance and reliability",
-            "Automate deployment processes"
-        ],
-        tags: ["AWS", "Docker", "Kubernetes", "CI/CD"]
-    },
-    {
-        id: 6,
-        title: "Data Analyst",
-        company: "DataInsights",
-        location: "Berlin",
-        type: "full-time",
-        category: "technology",
-        salary: "€50k - €70k",
-        posted: "4 days ago",
-        description: "Analyze data to provide actionable insights and support data-driven decision making.",
-        requirements: [
-            "Strong SQL and data analysis skills",
-            "Experience with Python or R",
-            "Knowledge of data visualization tools",
-            "Statistical analysis background"
-        ],
-        responsibilities: [
-            "Analyze complex datasets",
-            "Create reports and dashboards",
-            "Collaborate with stakeholders",
-            "Identify trends and patterns in data"
-        ],
-        tags: ["SQL", "Python", "Tableau", "Statistics"]
-    },
-    {
-        id: 7,
-        title: "Product Manager",
-        company: "InnovateTech",
-        location: "San Francisco",
-        type: "full-time",
-        category: "technology",
-        salary: "$140k - $180k",
-        posted: "2 days ago",
-        description: "Drive product strategy and execution for our flagship products.",
-        requirements: [
-            "5+ years of product management experience",
-            "Strong technical background",
-            "Experience with agile methodologies",
-            "Excellent stakeholder management skills"
-        ],
-        responsibilities: [
-            "Define product vision and roadmap",
-            "Prioritize features and requirements",
-            "Work with engineering and design teams",
-            "Analyze market trends and competition"
-        ],
-        tags: ["Product Strategy", "Agile", "Roadmap", "Analytics"]
-    },
-    {
-        id: 8,
-        title: "Junior Web Developer",
-        company: "WebAgency",
-        location: "Remote",
-        type: "full-time",
-        category: "technology",
-        salary: "$50k - $70k",
-        posted: "1 day ago",
-        description: "Great opportunity for a junior developer to grow their skills in a supportive environment.",
-        requirements: [
-            "1-2 years of web development experience",
-            "Knowledge of HTML, CSS, and JavaScript",
-            "Eagerness to learn new technologies",
-            "Good communication skills"
-        ],
-        responsibilities: [
-            "Build responsive websites",
-            "Maintain existing web applications",
-            "Work with senior developers",
-            "Learn best practices and modern tools"
-        ],
-        tags: ["HTML", "CSS", "JavaScript", "Git"]
-    },
-    {
-        id: 9,
-        title: "Sales Executive",
-        company: "SalesPro",
-        location: "New York",
-        type: "full-time",
-        category: "sales",
-        salary: "$70k - $100k + Commission",
-        posted: "3 days ago",
-        description: "Drive sales growth and build lasting relationships with clients.",
-        requirements: [
-            "3+ years of B2B sales experience",
-            "Proven track record of meeting targets",
-            "Excellent negotiation skills",
-            "CRM experience (Salesforce preferred)"
-        ],
-        responsibilities: [
-            "Generate new business opportunities",
-            "Manage sales pipeline",
-            "Present product demos to clients",
-            "Close deals and meet sales quotas"
-        ],
-        tags: ["B2B Sales", "Salesforce", "Lead Generation", "Negotiation"]
-    },
-    {
-        id: 10,
-        title: "Content Writer",
-        company: "ContentCreators",
-        location: "Remote",
-        type: "part-time",
-        category: "marketing",
-        salary: "$30k - $45k",
-        posted: "6 days ago",
-        description: "Create engaging content for various digital platforms and audiences.",
-        requirements: [
-            "2+ years of content writing experience",
-            "Excellent writing and editing skills",
-            "SEO knowledge",
-            "Ability to work independently"
-        ],
-        responsibilities: [
-            "Write blog posts and articles",
-            "Create social media content",
-            "Optimize content for SEO",
-            "Collaborate with marketing team"
-        ],
-        tags: ["Content Writing", "SEO", "Blogging", "Social Media"]
-    },
-    {
-        id: 11,
-        title: "Mobile App Developer",
-        company: "AppStudio",
-        location: "San Francisco",
-        type: "full-time",
-        category: "technology",
-        salary: "$110k - $150k",
-        posted: "2 days ago",
-        description: "Build innovative mobile applications for iOS and Android platforms.",
-        requirements: [
-            "Experience with React Native or Flutter",
-            "Understanding of mobile UI/UX principles",
-            "Knowledge of mobile app deployment",
-            "Strong problem-solving skills"
-        ],
-        responsibilities: [
-            "Develop cross-platform mobile apps",
-            "Optimize app performance",
-            "Work with APIs and backend services",
-            "Test and debug applications"
-        ],
-        tags: ["React Native", "Flutter", "Mobile Development", "iOS"]
-    },
-    {
-        id: 12,
-        title: "Financial Analyst",
-        company: "FinanceGroup",
-        location: "London",
-        type: "full-time",
-        category: "finance",
-        salary: "£55k - £75k",
-        posted: "1 week ago",
-        description: "Provide financial analysis and support strategic business decisions.",
-        requirements: [
-            "Bachelor's degree in Finance or related field",
-            "3+ years of financial analysis experience",
-            "Advanced Excel skills",
-            "Strong analytical thinking"
-        ],
-        responsibilities: [
-            "Perform financial modeling and analysis",
-            "Prepare financial reports",
-            "Support budgeting and forecasting",
-            "Present findings to management"
-        ],
-        tags: ["Financial Modeling", "Excel", "Forecasting", "Analysis"]
+        title: "Supervisor, Customer Experience",
+        company: "ANH Recruitment Manpower",
+        type: "Agency",
+        rating: 5.0,
+        reviews: 1,
+        workMode: "On-site",
+        location: "Batangas City, Batangas, Calabarzon, 4200, Philippines",
+        jobType: "Full Time",
+        salary: "$10K-$10K",
+        description: "Through our dedicated associates, Conduent delivers mission-critical services and solutions on behalf of Fortune 100 com...",
+        postedTime: "2 days ago",
+        views: 12,
+        applications: 0,
+        trending: true
     }
 ];
 
-// State management
-let filteredJobs = [...jobsData];
+const categories = [
+    { name: "Customer Service", icon: "❤️", count: 2 },
+    { name: "Technology", icon: "💻", count: 0 },
+    { name: "Healthcare", icon: "🏥", count: 0 },
+    { name: "Sales", icon: "💰", count: 0 },
+    { name: "Marketing", icon: "📱", count: 0 },
+    { name: "Finance", icon: "📊", count: 0 }
+];
 
-// DOM elements
-const searchInput = document.getElementById('searchInput');
-const locationFilter = document.getElementById('locationFilter');
-const typeFilter = document.getElementById('typeFilter');
-const categoryFilter = document.getElementById('categoryFilter');
-const jobsList = document.getElementById('jobsList');
-const resultsCount = document.getElementById('resultsCount');
-const clearFilters = document.getElementById('clearFilters');
-const noResults = document.getElementById('noResults');
-const loading = document.getElementById('loading');
-const modal = document.getElementById('jobModal');
-const closeModal = document.getElementsByClassName('close')[0];
-
-// Initialize the page
-function init() {
-    renderJobs(jobsData);
-    attachEventListeners();
+// ==================== THEME MANAGEMENT ====================
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.className = `${savedTheme}-theme`;
+    updateThemeIcon(savedTheme);
 }
 
-// Render jobs to the page
-function renderJobs(jobs) {
-    jobsList.innerHTML = '';
+function toggleTheme() {
+    const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
-    if (jobs.length === 0) {
-        noResults.style.display = 'block';
-        jobsList.style.display = 'none';
-    } else {
-        noResults.style.display = 'none';
-        jobsList.style.display = 'grid';
-        
-        jobs.forEach(job => {
-            const jobCard = createJobCard(job);
-            jobsList.appendChild(jobCard);
+    document.body.className = `${newTheme}-theme`;
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
+}
+
+function updateThemeIcon(theme) {
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        const icon = themeToggle.querySelector('i');
+        if (theme === 'dark') {
+            icon.className = 'fas fa-sun';
+        } else {
+            icon.className = 'fas fa-moon';
+        }
+    }
+}
+
+// ==================== LANGUAGE MANAGEMENT ====================
+const languageData = {
+    en: { flag: "🇬🇧", name: "English" },
+    es: { flag: "🇪🇸", name: "Español" },
+    fr: { flag: "🇫🇷", name: "Français" },
+    de: { flag: "🇩🇪", name: "Deutsch" }
+};
+
+function initializeLanguage() {
+    const savedLang = localStorage.getItem('language') || 'en';
+    updateLanguageDisplay(savedLang);
+}
+
+function updateLanguageDisplay(lang) {
+    const langBtn = document.getElementById('langBtn');
+    if (langBtn && languageData[lang]) {
+        langBtn.querySelector('.flag-icon').textContent = languageData[lang].flag;
+    }
+}
+
+function toggleLanguageDropdown() {
+    const dropdown = document.getElementById('langDropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('active');
+    }
+}
+
+function selectLanguage(lang) {
+    localStorage.setItem('language', lang);
+    updateLanguageDisplay(lang);
+    toggleLanguageDropdown();
+    // Here you would typically trigger translation of the page content
+    console.log(`Language changed to: ${languageData[lang].name}`);
+}
+
+// ==================== PROMO BANNER ====================
+function initializePromoBanner() {
+    const banner = document.getElementById('promoBanner');
+    const closeBtn = document.getElementById('closeBanner');
+    const bannerClosed = localStorage.getItem('promoBannerClosed');
+    
+    if (bannerClosed === 'true') {
+        banner.classList.add('hidden');
+    }
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            banner.classList.add('hidden');
+            localStorage.setItem('promoBannerClosed', 'true');
         });
     }
-    
-    resultsCount.textContent = `${jobs.length} job${jobs.length !== 1 ? 's' : ''} found`;
 }
 
-// Create a job card element
-function createJobCard(job) {
-    const card = document.createElement('div');
-    card.className = 'job-card';
-    card.onclick = () => showJobDetail(job);
+// ==================== VIEW TOGGLE (MAP/LIST) ====================
+function initializeViewToggle() {
+    const mapViewBtn = document.getElementById('mapViewBtn');
+    const listViewBtn = document.getElementById('listViewBtn');
+    const mapContainer = document.getElementById('mapContainer');
+    const listContainer = document.getElementById('listContainer');
     
-    const companyInitial = job.company.charAt(0);
-    
-    card.innerHTML = `
-        <div class="job-card-header">
-            <div class="company-logo">${companyInitial}</div>
-            <div class="job-info">
-                <h3 class="job-title">${job.title}</h3>
-                <p class="company-name">${job.company}</p>
-            </div>
-        </div>
-        <div class="job-meta">
-            <span class="meta-item">
-                <i class="fas fa-map-marker-alt"></i>
-                ${job.location}
-            </span>
-            <span class="meta-item">
-                <i class="fas fa-briefcase"></i>
-                ${formatJobType(job.type)}
-            </span>
-            <span class="meta-item">
-                <i class="fas fa-folder"></i>
-                ${formatCategory(job.category)}
-            </span>
-        </div>
-        <p class="job-description">${job.description}</p>
-        <div class="job-tags">
-            ${job.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-        </div>
-        <div class="job-footer">
-            <span class="salary">${job.salary}</span>
-            <span class="posted-date">
-                <i class="far fa-clock"></i> ${job.posted}
-            </span>
-        </div>
-    `;
-    
-    return card;
-}
-
-// Show job detail in modal
-function showJobDetail(job) {
-    const jobDetail = document.getElementById('jobDetail');
-    
-    jobDetail.innerHTML = `
-        <div class="job-detail-header">
-            <h2 class="job-detail-title">${job.title}</h2>
-            <p class="job-detail-company">${job.company}</p>
-            <div class="job-detail-meta">
-                <span class="meta-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    ${job.location}
-                </span>
-                <span class="meta-item">
-                    <i class="fas fa-briefcase"></i>
-                    ${formatJobType(job.type)}
-                </span>
-                <span class="meta-item">
-                    <i class="fas fa-folder"></i>
-                    ${formatCategory(job.category)}
-                </span>
-                <span class="meta-item">
-                    <i class="fas fa-dollar-sign"></i>
-                    ${job.salary}
-                </span>
-                <span class="meta-item">
-                    <i class="far fa-clock"></i>
-                    Posted ${job.posted}
-                </span>
-            </div>
-        </div>
+    if (mapViewBtn && listViewBtn) {
+        mapViewBtn.addEventListener('click', () => {
+            mapViewBtn.classList.add('active');
+            listViewBtn.classList.remove('active');
+            mapContainer.style.display = 'flex';
+            listContainer.style.display = 'none';
+        });
         
-        <div class="job-detail-section">
-            <h3>About the Role</h3>
-            <p>${job.description}</p>
-        </div>
-        
-        <div class="job-detail-section">
-            <h3>Requirements</h3>
-            <ul>
-                ${job.requirements.map(req => `<li>${req}</li>`).join('')}
-            </ul>
-        </div>
-        
-        <div class="job-detail-section">
-            <h3>Responsibilities</h3>
-            <ul>
-                ${job.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
-            </ul>
-        </div>
-        
-        <div class="job-detail-section">
-            <h3>Skills</h3>
-            <div class="job-tags">
-                ${job.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-        </div>
-        
-        <button class="apply-btn" onclick="applyForJob(${job.id})">
-            <i class="fas fa-paper-plane"></i> Apply Now
-        </button>
-    `;
-    
-    modal.style.display = 'block';
-}
-
-// Apply for job (placeholder function)
-function applyForJob(jobId) {
-    const sessionRaw = localStorage.getItem('applynhireSession');
-    const session = sessionRaw ? JSON.parse(sessionRaw) : null;
-    if (!session) {
-        const goToAuth = confirm('You need to be signed in to apply. Sign in now?');
-        if (goToAuth) {
-            window.location.href = 'signin.html';
-        }
-        return;
+        listViewBtn.addEventListener('click', () => {
+            listViewBtn.classList.add('active');
+            mapViewBtn.classList.remove('active');
+            mapContainer.style.display = 'none';
+            listContainer.style.display = 'block';
+        });
     }
-
-    alert(`Application process for job ID ${jobId} would be initiated here. You are signed in as ${session.email} (${session.role}).`);
 }
 
-// Filter jobs based on search and filters
-function filterJobs() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const location = locationFilter.value;
-    const type = typeFilter.value;
-    const category = categoryFilter.value;
+// ==================== JOB RENDERING ====================
+function renderJobCard(job) {
+    return `
+        <div class="job-card">
+            <div class="job-card-header">
+                <div>
+                    ${job.trending ? '<div class="job-card-badge">📈 Trending Jobs</div>' : ''}
+                </div>
+            </div>
+            <h3 class="job-title">${job.title}</h3>
+            <div class="job-company">
+                <span>${job.company}</span>
+                <span class="company-badge">${job.type}</span>
+                <span>⭐ ${job.rating} (${job.reviews})</span>
+            </div>
+            <div class="job-meta">
+                <div class="job-meta-item">
+                    <i class="fas fa-map-pin"></i>
+                    <span>${job.workMode}</span>
+                </div>
+                <div class="job-meta-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>${job.location}</span>
+                </div>
+            </div>
+            <div class="job-meta">
+                <span class="job-type-badge">${job.jobType}</span>
+                <span class="job-salary">${job.salary}</span>
+            </div>
+            <p class="job-description">${job.description}</p>
+            <div class="job-stats">
+                <div class="job-stat">
+                    <i class="fas fa-clock"></i>
+                    <span>${job.postedTime}</span>
+                </div>
+                <div class="job-stat">
+                    <i class="fas fa-eye"></i>
+                    <span>${job.views} views</span>
+                </div>
+                <div class="job-stat">
+                    <i class="fas fa-user"></i>
+                    <span>${job.applications} applications</span>
+                </div>
+            </div>
+            <div class="job-actions">
+                <button class="job-btn job-btn-primary" onclick="applyToJob(${job.id})">View Details</button>
+                <button class="job-btn job-btn-secondary" onclick="likeJob(${job.id})">
+                    <i class="far fa-heart"></i>
+                    <span class="like-count">0</span>
+                    Like
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function renderCategoryCard(category) {
+    return `
+        <div class="category-card" onclick="filterByCategory('${category.name}')">
+            <div class="category-icon">${category.icon}</div>
+            <h3 class="category-name">${category.name}</h3>
+            <p class="category-count">${category.count} jobs</p>
+        </div>
+    `;
+}
+
+function loadJobs() {
+    // Load trending jobs
+    const trendingJobsList = document.getElementById('trendingJobsList');
+    if (trendingJobsList) {
+        const trendingJobs = demoJobs.filter(job => job.trending);
+        trendingJobsList.innerHTML = trendingJobs.map(job => renderJobCard(job)).join('');
+    }
     
-    filteredJobs = jobsData.filter(job => {
-        const matchesSearch = job.title.toLowerCase().includes(searchTerm) ||
-                            job.company.toLowerCase().includes(searchTerm) ||
-                            job.description.toLowerCase().includes(searchTerm) ||
-                            job.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+    // Load search results
+    const searchJobsList = document.getElementById('searchJobsList');
+    if (searchJobsList) {
+        searchJobsList.innerHTML = demoJobs.map(job => renderJobCard(job)).join('');
+    }
+    
+    // Update search results count
+    const searchResultsCount = document.getElementById('searchResultsCount');
+    if (searchResultsCount) {
+        searchResultsCount.textContent = demoJobs.length;
+    }
+}
+
+function loadCategories() {
+    const categoriesGrid = document.getElementById('categoriesGrid');
+    if (categoriesGrid) {
+        categoriesGrid.innerHTML = categories.map(category => renderCategoryCard(category)).join('');
+    }
+}
+
+// ==================== SEARCH FUNCTIONALITY ====================
+function performSearch() {
+    const jobTitle = document.getElementById('jobTitleInput')?.value || '';
+    const location = document.getElementById('locationInput')?.value || '';
+    const jobType = document.getElementById('jobTypeSelect')?.value || '';
+    const minSalary = document.getElementById('minSalaryInput')?.value || '';
+    
+    console.log('Searching with:', { jobTitle, location, jobType, minSalary });
+    
+    // Filter jobs based on search criteria
+    let filteredJobs = demoJobs.filter(job => {
+        const matchesTitle = !jobTitle || job.title.toLowerCase().includes(jobTitle.toLowerCase());
+        const matchesLocation = !location || job.location.toLowerCase().includes(location.toLowerCase());
+        const matchesType = !jobType || job.jobType.toLowerCase() === jobType.toLowerCase();
         
-        const matchesLocation = !location || 
-                               job.location.toLowerCase().replace(/\s+/g, '-') === location;
-        
-        const matchesType = !type || job.type === type;
-        
-        const matchesCategory = !category || job.category === category;
-        
-        return matchesSearch && matchesLocation && matchesType && matchesCategory;
+        return matchesTitle && matchesLocation && matchesType;
     });
     
-    renderJobs(filteredJobs);
+    // Update search results
+    const searchJobsList = document.getElementById('searchJobsList');
+    if (searchJobsList) {
+        if (filteredJobs.length > 0) {
+            searchJobsList.innerHTML = filteredJobs.map(job => renderJobCard(job)).join('');
+        } else {
+            searchJobsList.innerHTML = '<p style="text-align: center; padding: 2rem; color: var(--text-secondary);">No jobs found matching your criteria.</p>';
+        }
+    }
+    
+    // Update count
+    const searchResultsCount = document.getElementById('searchResultsCount');
+    if (searchResultsCount) {
+        searchResultsCount.textContent = filteredJobs.length;
+    }
+    
+    // Switch to list view to show results
+    document.getElementById('listViewBtn')?.click();
 }
 
-// Clear all filters
-function clearAllFilters() {
-    searchInput.value = '';
-    locationFilter.value = '';
-    typeFilter.value = '';
-    categoryFilter.value = '';
-    filterJobs();
+function clearFilters() {
+    document.getElementById('jobTitleInput').value = '';
+    document.getElementById('locationInput').value = '';
+    document.getElementById('jobTypeSelect').value = '';
+    document.getElementById('minSalaryInput').value = '';
+    
+    // Reload all jobs
+    loadJobs();
 }
 
-// Format job type for display
-function formatJobType(type) {
-    return type.split('-').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+// ==================== JOB ACTIONS ====================
+function applyToJob(jobId) {
+    const job = demoJobs.find(j => j.id === jobId);
+    if (job) {
+        alert(`Applying to: ${job.title}\n\nThis would redirect to the application page.`);
+        // In a real app, redirect to application page or open modal
+    }
 }
 
-// Format category for display
-function formatCategory(category) {
-    return category.charAt(0).toUpperCase() + category.slice(1);
+function likeJob(jobId) {
+    console.log(`Liked job ID: ${jobId}`);
+    // In a real app, this would save to backend and update UI
+    alert('Job saved to your favorites!');
 }
 
-// Attach event listeners
-function attachEventListeners() {
-    // Search and filter inputs
-    searchInput.addEventListener('input', filterJobs);
-    locationFilter.addEventListener('change', filterJobs);
-    typeFilter.addEventListener('change', filterJobs);
-    categoryFilter.addEventListener('change', filterJobs);
+function filterByCategory(categoryName) {
+    console.log(`Filtering by category: ${categoryName}`);
+    alert(`Filtering jobs by ${categoryName} category.\n\nThis feature would show jobs in this category.`);
+}
+
+// ==================== EVENT LISTENERS ====================
+function initializeEventListeners() {
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    // Language selector
+    const langBtn = document.getElementById('langBtn');
+    if (langBtn) {
+        langBtn.addEventListener('click', toggleLanguageDropdown);
+    }
+    
+    // Language options
+    document.querySelectorAll('.lang-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const lang = this.getAttribute('data-lang');
+            selectLanguage(lang);
+        });
+    });
+    
+    // Close language dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const langSelector = document.querySelector('.language-selector');
+        if (langSelector && !langSelector.contains(event.target)) {
+            document.getElementById('langDropdown')?.classList.remove('active');
+        }
+    });
+    
+    // Search button
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', performSearch);
+    }
     
     // Clear filters button
-    clearFilters.addEventListener('click', clearAllFilters);
-    
-    // Modal close
-    closeModal.onclick = function() {
-        modal.style.display = 'none';
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', clearFilters);
     }
     
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    }
-    
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && modal.style.display === 'block') {
-            modal.style.display = 'none';
+    // Enter key on search inputs
+    ['jobTitleInput', 'locationInput', 'minSalaryInput'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
         }
     });
 }
 
-// Simulate loading jobs (for demo purposes)
-function simulateLoading() {
-    loading.style.display = 'block';
-    jobsList.style.display = 'none';
+// ==================== INITIALIZATION ====================
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTheme();
+    initializeLanguage();
+    initializePromoBanner();
+    initializeViewToggle();
+    initializeEventListeners();
+    loadJobs();
+    loadCategories();
     
-    setTimeout(() => {
-        loading.style.display = 'none';
-        init();
-    }, 800);
-}
-
-// Start the application
-// simulateLoading(); // Uncomment to show loading animation
-init();
-
-// Optional: Function to fetch jobs from an API
-async function fetchJobsFromAPI() {
-    try {
-        loading.style.display = 'block';
-        jobsList.style.display = 'none';
-        
-        // Example API call (replace with your actual API endpoint)
-        // const response = await fetch('https://api.example.com/jobs');
-        // const data = await response.json();
-        // jobsData = data;
-        
-        loading.style.display = 'none';
-        renderJobs(jobsData);
-    } catch (error) {
-        console.error('Error fetching jobs:', error);
-        loading.style.display = 'none';
-        noResults.style.display = 'block';
-    }
-}
-
-// Uncomment to use API integration
-// fetchJobsFromAPI();
+    console.log('✅ Website initialized successfully!');
+    console.log('Features active: Theme Toggle, Language Selector, Trending Jobs, Categories');
+});
