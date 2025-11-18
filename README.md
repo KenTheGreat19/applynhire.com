@@ -95,8 +95,15 @@ Then open your browser and navigate to `http://localhost:8000`
 Project-1.1/
 ├── site/            # All website content (HTML/CSS/JS)
 │   ├── index.html
-│   ├── styles.css
-│   ├── script.js
+│   ├── css/
+│   │   ├── styles.css
+│   │   └── styles_backup.css
+│   ├── js/
+│   │   ├── script.js
+│   │   ├── header.js
+│   │   ├── auth-forms.js
+│   │   ├── auth-common.js
+│   │   └── siteAuth.js
 │   ├── signin.html
 │   ├── signup.html
 │   ├── employer-signin.html
@@ -112,10 +119,10 @@ Project-1.1/
 
 ## Migration Notes
 
-- The primary site files (HTML/CSS/JS) were moved into the `site/` directory for better organization.
-- A consolidated auth script (`site/auth-forms.js`) replaces the multiple per-page auth scripts to reduce duplication.
+- The primary site files (HTML/CSS/JS) were moved into `site/` and further organized into `site/css/` and `site/js/` for improved structure.
+- A consolidated auth script (`site/js/auth-forms.js`) replaces multiple per-page scripts. Auth utilities are in `site/js/auth-common.js`.
+- Deprecated root JS files were moved into `site/legacy/` and replaced with canonical copies under `site/js/`.
 - Root HTML files now redirect to `site/` equivalents to retain backward compatibility while keeping the project structure tidy.
-- Legacy root JS files are kept for reference but should not be used; new code runs from under `site/`.
 
 Branding and LocalStorage migration
 ---------------------------------
