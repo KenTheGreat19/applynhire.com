@@ -80,8 +80,8 @@
 
         const session = getSession();
         if (!session || session.role !== 'employer') {
-            alert('You are not signed in as an employer. Redirecting to Sign In.');
-            location.href = 'signin.html';
+            alert('You are not signed in as an employer. Redirecting to Employer Sign In.');
+            location.href = 'employer-signin.html';
         } else {
             document.getElementById('welcome').textContent = `Hello, ${session.name || 'Employer'}`;
             document.getElementById('email').textContent = session.email;
@@ -90,7 +90,7 @@
 
         document.getElementById('signOutBtn').addEventListener('click', () => {
             localStorage.removeItem('applynhireSession');
-            location.href = 'signin.html';
+            location.href = 'employer-signin.html';
         });
 
         // Employer job posting and list
