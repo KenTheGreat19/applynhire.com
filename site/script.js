@@ -391,7 +391,7 @@ function applyForJob(jobId) {
     if (!session) {
         const goToAuth = confirm('You need to be signed in to apply. Sign in now?');
         if (goToAuth) {
-            window.location.href = 'signin.html';
+            window.location.href = 'applicant.html';
         }
         return;
     }

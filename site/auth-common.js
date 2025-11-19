@@ -89,7 +89,7 @@ function redirectToRolePage(role) {
     if (role === 'employer') {
         window.location.href = 'employer.html';
     } else {
-        window.location.href = 'applicant.html';
+        window.location.href = 'applicant-dashboard.html';
     }
 }
 

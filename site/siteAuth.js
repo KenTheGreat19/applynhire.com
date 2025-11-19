@@ -49,9 +49,9 @@ function showHeaderAuth() {
         nav.appendChild(employerLink);
     } else {
         const signInLink = document.createElement('a');
-        signInLink.href = 'signin.html';
+        signInLink.href = 'applicant.html';
         signInLink.className = 'sign-in-btn';
-        signInLink.textContent = 'Sign in';
+        signInLink.textContent = 'For Applicant';
 
         const signUpLink = document.createElement('a');
         signUpLink.href = 'signup.html';
@@ -60,7 +60,7 @@ function showHeaderAuth() {
         signUpLink.style.marginLeft = '8px';
 
         const employerLink = document.createElement('a');
-        employerLink.href = 'employer-signin.html';
+        employerLink.href = 'employer.html';
         employerLink.className = 'employer-link';
         employerLink.textContent = 'Employer site';
         employerLink.style.marginLeft = '12px';

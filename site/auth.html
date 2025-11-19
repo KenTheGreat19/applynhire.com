@@ -14,14 +14,18 @@
                 <a class="site-logo" href="index.html"><img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE"> APPLY N HIRE</a>
                 <p class="tagline">Sign in or sign up to continue</p>
             </div>
-            <div class="right-nav"><nav class="auth-nav"></nav></div>
+                <div class="right-nav">
+                    <a href="employer.html" class="for-employers-btn">For Employers</a>
+                    <a href="applicant.html" class="sign-in-btn">For Applicant</a>
+                    <nav class="auth-nav"></nav>
+                </div>
         </div>
     </header>
     </header>
 
     <main class="container auth-page">
         <div class="auth-card" style="text-align:center;">
-            <p class="form-note">This page now redirects to Sign In. If you are not redirected automatically, <a href="signin.html">click here to sign in</a>.</p>
+            <p class="form-note">This page now redirects to Sign In. If you are not redirected automatically, <a href="applicant.html">click here to sign in</a>.</p>
         </div>
     </main>
 
@@ -35,7 +39,7 @@
     <script src="js/header.js"></script>
     <script>
         // Keep `auth.html` as a redirect to the new sign-in page for backward compatibility
-        setTimeout(() => { window.location.href = 'signin.html'; }, 200);
+        setTimeout(() => { window.location.href = 'applicant.html'; }, 200);
     </script>
 </body>
 </html>

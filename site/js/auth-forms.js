@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (role === 'employer') {
                 location.href = 'employer.html';
             } else {
-                location.href = 'applicant.html';
+                location.href = 'applicant-dashboard.html';
             }
         });
         // Update UI colors based on role (applicant vs employer)
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (role === 'employer') {
                 location.href = 'employer.html';
             } else {
-                location.href = 'applicant.html';
+                location.href = 'applicant-dashboard.html';
             }
         });
         // Similar role color toggle for signup forms
