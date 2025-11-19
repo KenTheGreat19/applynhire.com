@@ -3,136 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>APPLY N HIRE - Apply Job and Hire Talent for Free!</title>
-    <meta name="description" content="Apply Job and Hire Talent for Free! - APPLY N HIRE (applynhire.com)">
-    <meta property="og:title" content="APPLY N HIRE - Apply Job and Hire Talent for Free!">
-    <meta property="og:site_name" content="APPLY N HIRE">
-    <meta property="og:description" content="Apply Job and Hire Talent for Free!">
-    <link rel="stylesheet" href="vendor/leaflet.css">
-    <link rel="stylesheet" href="site/css/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>APPLY N HIRE - Apply Job and Hire Talent for Free!</title>
+<meta name="description" content="Apply Job and Hire Talent for Free! - APPLY N HIRE (applynhire.com)">
+<meta property="og:title" content="APPLY N HIRE - Apply Job and Hire Talent for Free!">
+<meta property="og:site_name" content="APPLY N HIRE">
+<meta property="og:description" content="Apply Job and Hire Talent for Free!">
+
+<link rel="stylesheet" href="vendor/leaflet.css">
+<link rel="stylesheet" href="site/css/styles.css">
+<link rel="stylesheet" href="styles.css">
     <link rel="icon" href="vendor/images/logo.png" type="image/png">
     <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-<header class="site-header">
-    <div class="container header-row">
-        <div class="brand">
-            <a class="site-logo" href="index.html">
-                <img class="site-logo-img"
-                     src="vendor/images/logo.png"
-                     onerror="this.onerror=null;this.src='vendor/images/logo.svg'"
-                     alt="APPLY N HIRE">
-                <span class="site-title">APPLY N HIRE</span>
-            </a>
-            <p class="tagline">Apply Job and Hire Talent for Free!</p>
+<body class="light-theme">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-row header-content">
+      <div class="brand">
+        <a class="site-logo" href="index.html">
+          <img class="site-logo-img"
+               src="vendor/images/logo.png"
+               onerror="this.onerror=null;this.src='vendor/images/logo.svg'"
+               alt="APPLY N HIRE">
+          <span class="site-title">APPLY N HIRE</span>
+        </a>
+        <p class="tagline">Apply Job and Hire Talent for Free!</p>
+      </div>
+
+      <div class="header-actions right-nav">
+        <!-- Language selector -->
+        <div class="language-selector" id="languageSelector">
+          <button class="lang-btn" id="langBtn" aria-expanded="false" aria-haspopup="true" aria-controls="langDropdown">
+            <span class="flag-icon" aria-hidden="true">🇬🇧</span>
+            <span class="sr-only">Change language</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown" role="menu" aria-hidden="true">
+            <button class="lang-option" data-lang="en" role="menuitem">
+              <span class="flag-icon">🇬🇧</span>
+              <span>English</span>
+            </button>
+            <button class="lang-option" data-lang="es" role="menuitem">
+              <span class="flag-icon">🇪🇸</span>
+              <span>Español</span>
+            </button>
+            <button class="lang-option" data-lang="fr" role="menuitem">
+              <span class="flag-icon">🇫🇷</span>
+              <span>Français</span>
+            </button>
+            <button class="lang-option" data-lang="de" role="menuitem">
+              <span class="flag-icon">🇩🇪</span>
+              <span>Deutsch</span>
+            </button>
+          </div>
         </div>
 
-        <div class="right-nav">
-            <nav class="auth-nav" aria-label="Authentication Navigation">
-                <!-- auth links go here -->
-            </nav>
+        <!-- Theme toggle -->
+        <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-pressed="false">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+          <span class="sr-only">Toggle theme</span>
+        </button>
 
-            <a href="admin.html" class="admin-link" title="Admin Dashboard" aria-label="Admin Dashboard">
-                <i class="fas fa-cog" aria-hidden="true"></i>
-                <span class="admin-text">Admin Dashboard</span>
-            </a>
-        </div>
+        <!-- Employer / Sign in -->
+        <a href="employer.html" class="for-employers-btn">For Employers</a>
+        <a href="signin.html" class="sign-in-btn">Sign In</a>
+
+        <!-- Authentication nav (kept for dynamic auth links) -->
+        <nav class="auth-nav" aria-label="Authentication Navigation">
+          <!-- Placeholder: sign in/up or user menu will be injected here -->
+        </nav>
+
+        <!-- Admin link (kept from main branch) -->
+        <a href="admin.html" class="admin-link" title="Admin Dashboard" aria-label="Admin Dashboard">
+          <i class="fas fa-cog" aria-hidden="true"></i>
+          <span class="admin-text">Admin Dashboard</span>
+        </a>
+      </div>
     </div>
-</header>
+  </header>
             </div>
         </div>
     </header>
 
-    <main class="container">
-        <!-- Hero Search Section -->
-        <section class="search-section">
-            <div class="search-box">
-                <div class="search-input-group">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search job titles, keywords, or company names...">
-                </div>
-                <div class="filter-group">
-                    <select id="locationFilter">
-                        <option value="">📍 All Locations</option>
-                        <option value="remote">🌍 Remote</option>
-                        <option value="new-york">New York</option>
-                        <option value="san-francisco">San Francisco</option>
-                        <option value="london">London</option>
-                        <option value="berlin">Berlin</option>
-                    </select>
-                    <select id="typeFilter">
-                        <option value="">⏰ All Types</option>
-                        <option value="full-time">Full Time</option>
-                        <option value="part-time">Part Time</option>
-                        <option value="contract">Contract</option>
-                        <option value="internship">Internship</option>
-                    </select>
-                    <select id="categoryFilter">
-                        <option value="">💼 All Categories</option>
-                        <option value="technology">Technology</option>
-                        <option value="design">Design</option>
-                        <option value="marketing">Marketing</option>
-                        <option value="sales">Sales</option>
-                        <option value="finance">Finance</option>
-                    </select>
-                </div>
-            </div>
-            <div class="results-info">
-                <span id="resultsCount">0 jobs found</span>
-                <button id="clearFilters" class="clear-btn">
-                    <i class="fas fa-redo"></i> Clear Filters
-                </button>
-            </div>
-        </section>
-
-        <!-- World Map Section -->
-        <section class="map-section">
-            <div id="jobMap" class="map-container"></div>
-            <h2>Job Locations Worldwide</h2>
-        </section>
-
-        <!-- Job Listings -->
-        <section class="jobs-section">
-            <div id="jobsList" class="jobs-grid">
-                <!-- Jobs will be dynamically inserted here -->
-            </div>
-            <div id="noResults" class="no-results" style="display: none;">
-                <i class="fas fa-search"></i>
-                <h3>No jobs found</h3>
-                <p>Try adjusting your search criteria or browse all available positions</p>
-            </div>
-            <div id="loading" class="loading" style="display: none;">
-                <i class="fas fa-spinner fa-spin"></i>
-                <p>Loading jobs...</p>
-            </div>
-        </section>
-    </main>
-
-    <!-- Job Detail Modal -->
-    <div id="jobModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="jobDetail">
-                <!-- Job details will be inserted here -->
+    <!-- Promotional Banner -->
+    <div class="promo-banner" id="promoBanner">
+        <div class="container promo-content">
+            <p>
+                <span class="promo-icon">✨</span>
+                <span>Sign up or log in for a <strong>popunder ad-free experience</strong> and exclusive features!</span>
+            </p>
+            <div class="promo-actions">
+                <a href="signup.html" class="promo-cta-btn">Get Started Free</a>
+                <button class="promo-close" id="closeBanner" aria-label="Close banner">×</button>
             </div>
         </div>
     </div>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 APPLY N HIRE. All rights reserved. | applynhire.com</p>
+    <!-- Hero Section -->
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">Find Jobs. Hire Talent. 100% Free.</h1>
+                <p class="hero-subtitle">Post unlimited jobs. Apply instantly. No fees. Ever.</p>
+
+                <!-- Search Form -->
+                <div class="search-card">
+                    <div class="search-form">
+                        <div class="search-field">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="jobTitleInput" placeholder="Job title or keyword">
+                        </div>
+                        <div class="search-field">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" id="locationInput" placeholder="Location">
+                        </div>
+                        <div class="search-field">
+                            <i class="fas fa-briefcase"></i>
+                            <select id="jobTypeSelect">
+                                <option value="">Job Type</option>
+                                <option value="full-time">Full Time</option>
+                                <option value="part-time">Part Time</option>
+                                <option value="contract">Contract</option>
+                                <option value="internship">Internship</option>
+                                <option value="remote">Remote</option>
+                            </select>
+                        </div>
+                        <div class="search-field">
+                            <i class="fas fa-dollar-sign"></i>
+                            <input type="text" id="minSalaryInput" placeholder="Min Salary">
+                        </div>
+                    </div>
+                    <div class="search-actions">
+                        <button class="search-btn" id="searchBtn">
+                            <i class="fas fa-search"></i>
+                            Search Jobs
+                        </button>
+                        <button class="clear-filters-btn" id="clearFiltersBtn">Clear Filters</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<!-- Map / List view + Jobs listing (merged) -->
+<section class="map-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Explore Jobs on Map</h2>
+        <p class="section-subtitle">Find jobs near you with our interactive map</p>
+      </div>
+
+      <div class="view-toggle" role="tablist" aria-label="Map or list view">
+        <button class="view-btn active" data-view="map" id="mapViewBtn" aria-pressed="true">
+          <i class="fas fa-map" aria-hidden="true"></i>
+          <span>Map View</span>
+        </button>
+        <button class="view-btn" data-view="list" id="listViewBtn" aria-pressed="false">
+          <i class="fas fa-list" aria-hidden="true"></i>
+          <span>List View</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Map container (used by Leaflet or other map libs) -->
+    <div id="mapContainer" class="map-container" aria-live="polite">
+      <div id="jobMap" class="job-map" role="region" aria-label="Job map">
+        <div class="map-placeholder">
+          <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+          <p>Loading map...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toggled list view for search results -->
+    <div id="listContainer" class="list-container" hidden>
+      <p class="results-count"><span id="searchResultsCount">0</span> Search Jobs</p>
+      <p class="results-info">Ranked by engagement, employer reputation, and recency</p>
+      <div id="searchJobsList" class="job-cards-grid jobs-grid" aria-live="polite">
+        <!-- Search results will be loaded here -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Full job listings section (keeps main branch's jobs list) -->
+<section class="jobs-section">
+  <div class="container">
+    <h2>Job Listings</h2>
+    <div id="jobsList" class="jobs-grid">
+      <!-- Jobs will be dynamically inserted here -->
+    </div>
+  </div>
+</section>
+            </div>
+        </section>
+
+        <!-- Trending Jobs Section -->
+        <section class="trending-section">
+            <div class="container">
+                <div class="section-header-simple">
+                    <div class="section-icon">📈</div>
+                    <div>
+                        <h2 class="section-title">Trending Jobs</h2>
+                        <p class="section-subtitle">Most popular job postings this week based on engagement and views</p>
+                    </div>
+                </div>
+                <div class="trending-badge">📈 Trending Jobs</div>
+                <div id="trendingJobsList" class="job-cards-grid">
+                    <!-- Trending jobs will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Browse by Category Section -->
+        <section class="category-section">
+            <div class="container">
+                <h2 class="section-title">Browse Jobs by Category</h2>
+                <p class="section-subtitle">Explore thousands of job opportunities across various industries</p>
+                <div id="categoriesGrid" class="categories-grid">
+                    <!-- Categories will be loaded here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="footer-column">
+                <h3 class="footer-brand">ApplyNHire</h3>
+                <p class="footer-desc">100% Free Job Portal. Find jobs. Hire talent. No fees. Ever.</p>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-title">For Employers</h4>
+                <ul class="footer-links">
+                    <li><a href="employer.html">Post a Job</a></li>
+                    <li><a href="employer.html">Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-title">For Applicants</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Browse Jobs</a></li>
+                    <li><a href="applicant.html">My Applications</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-title">Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#security">Security</a></li>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2025 ApplyNHire — Free Forever</p>
+            </div>
         </div>
     </footer>
 
 <script>
-  // Redirect to the new site/ location (preserves main branch intent).
-  // If you prefer to load the local map scripts directly instead of redirecting,
-  // tell me and I'll restore vendor/leaflet.js and script.js instead.
-  window.location.href = 'site/index.html';
+  // Merge resolution: preserve main branch redirect intent for root pages,
+  // but still allow loading the local script.js when not redirecting
+  (function () {
+    var path = window.location.pathname || '/';
+    // Normalize trailing slash
+    path = path.replace(/\/+$/, '') || '/';
+
+    // If we're at the site root or index, redirect to site/index.html (main branch intent)
+    var isRoot = path === '/' || path === '/index.html';
+    if (isRoot) {
+      window.location.href = 'site/index.html';
+      return;
+    }
+
+    // Otherwise load the project's script (website_design_1.0 intent)
+    var script = document.createElement('script');
+    script.src = 'script.js';
+    script.defer = true;
+    document.head.appendChild(script);
+  })();
 </script>
+
 <noscript>
   <a href="site/index.html">Continue to site/index.html (JavaScript is required for automatic redirect)</a>
 </noscript>
