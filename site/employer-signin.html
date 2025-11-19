@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Sign In - APPLY N HIRE</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="vendor/images/logo.png" type="image/png">
+    <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="robots" content="noindex" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-row">
+            <div class="brand">
+                <a class="site-logo" href="index.html"><img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE - Employer"> APPLY N HIRE - Employer</a>
+                <p class="tagline">Employer Sign In</p>
+            </div>
+            <div class="right-nav"><nav class="auth-nav"></nav></div>
+        </div>
+    </header>
+
+    <main class="container auth-page">
+        <div class="auth-card">
+            <div id="message" class="auth-message"></div>
+            <form id="signInForm" class="auth-form">
+                <label for="signinEmail">Email</label>
+                <input id="signinEmail" type="email" placeholder="you@company.com" required>
+
+                <label for="signinPassword">Password</label>
+                <input id="signinPassword" type="password" placeholder="Password" required>
+
+                <!-- Role locked to employer for this page -->
+                <input type="hidden" id="signinRole" value="employer">
+
+                <button type="submit" class="primary-btn">Sign In</button>
+                <p class="form-note">Don't have an employer account? <a href="employer-signup.html">Create one</a></p>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 APPLY N HIRE. | applynhire.com</p>
+        </div>
+    </footer>
+
+    <script src="js/siteAuth.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/auth-common.js"></script>
+    <script src="js/auth-forms.js"></script>
+</body>
+</html>
