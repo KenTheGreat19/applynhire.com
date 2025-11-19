@@ -293,7 +293,7 @@ const jobsData = [
 // State management
 let filteredJobs = [...jobsData];
 
-// DOM elements
+// DOM elements (guards in case script runs on pages without job list)
 const searchInput = document.getElementById('searchInput');
 const locationFilter = document.getElementById('locationFilter');
 const typeFilter = document.getElementById('typeFilter');
@@ -306,29 +306,38 @@ const loading = document.getElementById('loading');
 const modal = document.getElementById('jobModal');
 const closeModal = document.getElementsByClassName('close')[0];
 
+function isElement(el) { return el !== null && el !== undefined; }
+
 // Initialize the page
 function init() {
-    renderJobs(jobsData);
+    if (isElement(jobsList)) renderJobs(jobsData);
     attachEventListeners();
 }
 
 // Render jobs to the page
 function renderJobs(jobs) {
+    if (!isElement(jobsList)) return;
     jobsList.innerHTML = '';
-    
+
+    if (!isElement(noResults) || !isElement(resultsCount)) {
+        // If any of these elements are missing, keep things safe
+        jobs.forEach(job => jobsList.appendChild(createJobCard(job)));
+        return;
+    }
+
     if (jobs.length === 0) {
         noResults.style.display = 'block';
         jobsList.style.display = 'none';
     } else {
         noResults.style.display = 'none';
         jobsList.style.display = 'grid';
-        
+
         jobs.forEach(job => {
             const jobCard = createJobCard(job);
             jobsList.appendChild(jobCard);
         });
     }
-    
+
     resultsCount.textContent = `${jobs.length} job${jobs.length !== 1 ? 's' : ''} found`;
 }
 
@@ -379,6 +388,7 @@ function createJobCard(job) {
 
 // Show job detail in modal
 function showJobDetail(job) {
+    if (!isElement(modal) || !isElement(document.getElementById('jobDetail'))) return;
     const jobDetail = document.getElementById('jobDetail');
     
     jobDetail.innerHTML = `
@@ -497,32 +507,20 @@ function formatCategory(category) {
 
 // Attach event listeners
 function attachEventListeners() {
-    // Search and filter inputs
-    searchInput.addEventListener('input', filterJobs);
-    locationFilter.addEventListener('change', filterJobs);
-    typeFilter.addEventListener('change', filterJobs);
-    categoryFilter.addEventListener('change', filterJobs);
-    
-    // Clear filters button
-    clearFilters.addEventListener('click', clearAllFilters);
-    
-    // Modal close
-    closeModal.onclick = function() {
-        modal.style.display = 'none';
+    // Only attach listeners if the elements are present
+    if (isElement(searchInput)) searchInput.addEventListener('input', filterJobs);
+    if (isElement(locationFilter)) locationFilter.addEventListener('change', filterJobs);
+    if (isElement(typeFilter)) typeFilter.addEventListener('change', filterJobs);
+    if (isElement(categoryFilter)) categoryFilter.addEventListener('change', filterJobs);
+
+    if (isElement(clearFilters)) clearFilters.addEventListener('click', clearAllFilters);
+
+    // Modal close handlers
+    if (isElement(closeModal) && isElement(modal)) {
+        closeModal.onclick = function() { modal.style.display = 'none'; }
+        window.onclick = function(event) { if (event.target === modal) { modal.style.display = 'none'; } }
+        document.addEventListener('keydown', function(event) { if (event.key === 'Escape' && modal.style.display === 'block') { modal.style.display = 'none'; } });
     }
-    
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    }
-    
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && modal.style.display === 'block') {
-            modal.style.display = 'none';
-        }
-    });
 }
 
 // Simulate loading jobs (for demo purposes)
