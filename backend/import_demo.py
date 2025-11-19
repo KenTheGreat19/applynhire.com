@@ -56,7 +56,7 @@ def import_jobs(jobs):
 
 def main():
     base = Path(__file__).resolve().parent.parent
-    script_path = base / 'site' / 'script.js'
+    script_path = base / 'site' / 'js' / 'script.js'
     if not script_path.exists():
         print('script.js not found at', script_path)
         return

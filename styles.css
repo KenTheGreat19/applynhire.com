@@ -176,8 +176,40 @@ body {
     background: var(--gray-50);
 }
 
+/* Flag icon styles (from website_design_1.0) */
 .flag-icon {
     font-size: 1.25rem;
+}
+
+/* Admin link styles (merged from main) */
+.admin-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.admin-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ==================== HERO/SEARCH SECTION ==================== */
+/* Search Section */
+/* Add your hero/search styles below */
+.search-section {
+    background: white;
+    padding: 3rem 2rem;
+    margin: 2.5rem 0;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-light);
+}
 }
 
 /* Theme Toggle */
@@ -983,4 +1015,143 @@ body {
     to {
         transform: rotate(360deg);
     }
+}
+
+/* Map Section */
+.map-section {
+    margin: 3rem 0;
+    text-align: center;
+}
+
+.map-section h2 {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.map-container {
+    height: 400px;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    margin: 0 auto;
+    max-width: 100%;
+    background: #f0f8ff;
+    overflow: hidden;
+    position: relative;
+    /* keep static sizing; no transitions to keep UI minimal */
+}
+
+/* Mobile responsiveness for map */
+@media (max-width: 768px) {
+    .map-container {
+        height: 300px;
+    }
+}
+
+.map-popup {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.map-popup ul {
+    padding-left: 1.2rem;
+    margin: 0.5rem 0;
+    text-align: left;
+}
+
+.map-popup button {
+    margin-top: 0.5rem;
+    border: none;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 0.35rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remote-icon {
+    background: transparent;
+    border-radius: 50%;
+    border: none;
+}
+
+.remote-icon span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #10b981;
+    color: #fff;
+    font-weight: 700;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* removed legend styles to keep UI minimal */
+
+/* Fullscreen toggle button in the top-right of the map container */
+.map-fullscreen-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 9601;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    gap: .4rem;
+    align-items: center;
+}
+
+.map-fullscreen-btn:hover { background: rgba(0,0,0,0.8); }
+
+/* When the map is full screen hide border radius and expand */
+.map-section.fullscreen {
+    position: fixed;
+    inset: 0; /* top:0;right:0;bottom:0;left:0 */
+    z-index: 9999;
+    margin: 0 !important;
+    width: 100vw;
+    height: 100vh;
+    padding: 16px 20px;
+    background: white;
+    /* minimal fullscreen style; no transitions */
+    transform: none;
+}
+
+.map-section.fullscreen .map-container {
+    height: calc(100vh - 90px);
+    border-radius: 0;
+    max-width: none;
+}
+
+/* When the map container uses native/fullscreen add slight fade effect */
+.map-section { opacity: 1; }
+.map-section.fullscreen { opacity: 1; }
+
+/* Slightly adjust the legend when fullscreen */
+/* legend has been removed; no adjustment required */
+
+/* Fullscreen close icon */
+.map-fullscreen-btn .icon { font-size: 14px; opacity: 0.95; }
+
+/* Hide header & footer when in fullscreen mode (native or overlay) */
+body.map-fullscreen-active header,
+body.map-fullscreen-active footer {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 220ms ease, opacity 220ms ease;
+}
+
+/* Slightly scale the map for a subtle zoom effect */
+.map-section.fullscreen .map-container {
+    /* keep the map container full height; no scaling */
+    transition: height 0ms;
 }

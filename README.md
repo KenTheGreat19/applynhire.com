@@ -95,8 +95,15 @@ Then open your browser and navigate to `http://localhost:8000`
 Project-1.1/
 ├── site/            # All website content (HTML/CSS/JS)
 │   ├── index.html
-│   ├── styles.css
-│   ├── script.js
+│   ├── css/
+│   │   ├── styles.css
+│   │   └── styles_backup.css
+│   ├── js/
+│   │   ├── script.js
+│   │   ├── header.js
+│   │   ├── auth-forms.js
+│   │   ├── auth-common.js
+│   │   └── siteAuth.js
 │   ├── signin.html
 │   ├── signup.html
 │   ├── employer-signin.html
@@ -112,10 +119,10 @@ Project-1.1/
 
 ## Migration Notes
 
-- The primary site files (HTML/CSS/JS) were moved into the `site/` directory for better organization.
-- A consolidated auth script (`site/auth-forms.js`) replaces the multiple per-page auth scripts to reduce duplication.
+- The primary site files (HTML/CSS/JS) were moved into `site/` and further organized into `site/css/` and `site/js/` for improved structure.
+- A consolidated auth script (`site/js/auth-forms.js`) replaces multiple per-page scripts. Auth utilities are in `site/js/auth-common.js`.
+- Deprecated root JS files were moved into `site/legacy/` and replaced with canonical copies under `site/js/`.
 - Root HTML files now redirect to `site/` equivalents to retain backward compatibility while keeping the project structure tidy.
-- Legacy root JS files are kept for reference but should not be used; new code runs from under `site/`.
 
 Branding and LocalStorage migration
 ---------------------------------
@@ -319,3 +326,54 @@ This project is open source and available under the [MIT License](LICENSE).
 3. Add database integration
 4. Set up actual job application processing
 5. Implement security measures (input sanitization, etc.)
+
+## Admin Dashboard
+
+The project now includes a comprehensive admin dashboard for managing job listings.
+
+### Features
+
+- **Dashboard Statistics**: Overview of total jobs, companies, locations, and categories
+- **Job Management**: Full CRUD operations (Create, Read, Update, Delete) for job listings
+- **Real-time Updates**: Changes made in admin reflect immediately on the main site
+- **Responsive Interface**: Admin panel works on all device sizes
+
+### Accessing the Admin Dashboard
+
+1. Open the main website (`index.html`)
+2. Click the "Admin Dashboard" link in the header
+3. The admin interface loads with current job data
+
+### Managing Jobs
+
+#### Adding a New Job
+1. Click "Add New Job" button
+2. Fill in all required fields marked with (*)
+3. Add job requirements and responsibilities (one per line)
+4. Add relevant tags separated by commas
+5. Click "Save Job"
+
+#### Editing Existing Jobs
+1. Click the "Edit" button next to any job in the table
+2. Modify the job information as needed
+3. Click "Save Job" to update
+
+#### Deleting Jobs
+1. Click the "Delete" button next to any job
+2. Confirm deletion in the popup modal
+3. Job is permanently removed
+
+### Technical Details
+
+- **Files**: `admin.html`, `admin.css`, `admin.js`
+- **Data Sharing**: Uses global `window.jobsData` for real-time synchronization
+- **UI Components**: Modal forms, responsive tables, notification system
+- **Validation**: Client-side form validation for required fields
+
+### Future Admin Enhancements
+
+- User authentication and authorization
+- Bulk job import/export
+- Job analytics and reporting
+- Email notifications for new applications
+- Advanced filtering and sorting options
