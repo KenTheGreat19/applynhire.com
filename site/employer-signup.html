@@ -24,24 +24,34 @@
     <main class="container auth-page">
         <div class="auth-card">
             <div id="message" class="auth-message"></div>
+            <div class="auth-avatar employer" aria-hidden="true"><i class="fas fa-briefcase"></i></div>
+            <h2>Create an employer account</h2>
+            <p class="tagline">Post jobs and manage applicants from one dashboard.</p>
+            <div class="social-buttons">
+                <button class="btn social"><i class="fab fa-google"></i> Continue with Google</button>
+                <button class="btn social"><i class="fab fa-yahoo"></i> Continue with Yahoo</button>
+                <button class="btn social"><i class="fab fa-microsoft"></i> Continue with Outlook</button>
+            </div>
+            <div class="or-line">OR SIGN UP WITH EMAIL</div>
             <form id="signUpForm" class="auth-form">
                 <label for="signupName">Company / Account Name</label>
-                <input id="signupName" type="text" placeholder="Company, e.g., Acme Inc." required>
+                <input id="signupName" name="name" type="text" placeholder="Company, e.g., Acme Inc." required>
 
                 <label for="signupEmail">Email</label>
-                <input id="signupEmail" type="email" placeholder="you@company.com" required>
+                <input id="signupEmail" name="email" type="email" placeholder="you@company.com" required>
 
                 <label for="signupPassword">Password</label>
-                <input id="signupPassword" type="password" placeholder="Password" required>
+                <input id="signupPassword" name="password" type="password" placeholder="Password" required>
 
                 <label for="signupPasswordConfirm">Confirm Password</label>
-                <input id="signupPasswordConfirm" type="password" placeholder="Confirm password" required>
+                <input id="signupPasswordConfirm" name="passwordConfirm" type="password" placeholder="Confirm password" required>
 
                 <!-- Role locked to employer for this page -->
-                <input type="hidden" id="signupRole" value="employer">
+                <input type="hidden" id="signupRole" name="role" value="employer">
 
                 <button type="submit" class="primary-btn">Create employer account</button>
                 <p class="form-note">Already have an employer account? <a href="employer-signin.html">Sign In</a></p>
+                <div class="auth-legal">By creating an employer account you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</div>
             </form>
         </div>
     </main>

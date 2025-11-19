@@ -24,18 +24,27 @@
     <main class="container auth-page">
         <div class="auth-card">
             <div id="message" class="auth-message"></div>
+            <div class="auth-avatar employer" aria-hidden="true"><i class="fas fa-briefcase"></i></div>
+            <h2>Employer Sign In</h2>
+            <p class="tagline">Welcome back! Post jobs for free.</p>
+            <div class="social-buttons">
+                <button class="btn social"><i class="fab fa-google"></i> Continue with Google</button>
+                <button class="btn social"><i class="fab fa-yahoo"></i> Continue with Yahoo</button>
+                <button class="btn social"><i class="fab fa-microsoft"></i> Continue with Outlook</button>
+            </div>
+            <div class="or-line">OR CONTINUE WITH EMAIL</div>
             <form id="signInForm" class="auth-form">
                 <label for="signinEmail">Email</label>
-                <input id="signinEmail" type="email" placeholder="you@company.com" required>
+                <input id="signinEmail" name="email" type="email" placeholder="you@company.com" required>
 
                 <label for="signinPassword">Password</label>
-                <input id="signinPassword" type="password" placeholder="Password" required>
+                <input id="signinPassword" name="password" type="password" placeholder="Password" required>
 
-                <!-- Role locked to employer for this page -->
-                <input type="hidden" id="signinRole" value="employer">
+                <input type="hidden" id="signinRole" name="role" value="employer">
 
                 <button type="submit" class="primary-btn">Sign In</button>
                 <p class="form-note">Don't have an employer account? <a href="employer-signup.html">Create one</a></p>
+                <div class="auth-legal">By clicking any of the 'Continue' options, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</div>
             </form>
         </div>
     </main>

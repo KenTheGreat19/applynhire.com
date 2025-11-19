@@ -24,21 +24,31 @@
     <main class="container auth-page">
         <div class="auth-card">
             <div id="message" class="auth-message"></div>
+            <div class="auth-avatar" aria-hidden="true"><i class="fas fa-user"></i></div>
+            <h2>Sign In</h2>
+            <p class="tagline">Welcome back! Find your dream job.</p>
+            <div class="social-buttons">
+                <button class="btn social"><i class="fab fa-google"></i> Continue with Google</button>
+                <button class="btn social"><i class="fab fa-yahoo"></i> Continue with Yahoo</button>
+                <button class="btn social"><i class="fab fa-microsoft"></i> Continue with Outlook</button>
+            </div>
+            <div class="or-line">OR CONTINUE WITH EMAIL</div>
             <form id="signInForm" class="auth-form">
                 <label for="signinEmail">Email</label>
-                <input id="signinEmail" type="email" placeholder="you@example.com" required>
+                <input id="signinEmail" name="email" type="email" placeholder="you@example.com" required>
 
                 <label for="signinPassword">Password</label>
-                <input id="signinPassword" type="password" placeholder="Password" required>
+                <input id="signinPassword" name="password" type="password" placeholder="Password" required>
 
                 <label for="signinRole">Sign in as</label>
-                <select id="signinRole">
+                <select id="signinRole" name="role">
                     <option value="applicant">Applicant</option>
                     <option value="employer">Employer</option>
                 </select>
 
                 <button type="submit" class="primary-btn">Sign In</button>
                 <p class="form-note">Don't have an account? <a href="signup.html">Sign Up</a></p>
+                <div class="auth-legal">By clicking any of the 'Continue' options, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</div>
             </form>
         </div>
     </main>
