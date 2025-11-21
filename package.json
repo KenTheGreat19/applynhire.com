@@ -4,7 +4,7 @@
   "description": "Job aggregator platform",
   "scripts": {
     "type-check": "tsc --project config/tsconfig.json --noEmit",
-    "build": "tsc --project config/tsconfig.json",
+    "build": "npm run type-check",
     "dev": "http-server site -p 8080"
   },
   "dependencies": {
