@@ -406,6 +406,72 @@ body.dark-theme .btn-outline:hover {
     opacity: 0.8;
 }
 
+/* Promo Banner */
+.promo-banner {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    padding: 1rem 0;
+    border-bottom: 1px solid #fbbf24;
+}
+
+.promo-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.promo-content p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #78350f;
+    font-size: 0.95rem;
+}
+
+.promo-icon {
+    font-size: 1.25rem;
+}
+
+.promo-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.promo-cta-btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: var(--border-radius-md);
+    background: #f59e0b;
+    color: var(--white);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.promo-cta-btn:hover {
+    background: #d97706;
+}
+
+.promo-close {
+    background: transparent;
+    border: none;
+    color: #78350f;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: var(--transition-fast);
+    line-height: 1;
+}
+
+.promo-close:hover {
+    opacity: 0.7;
+}
+
 /* ==================== HERO SECTION ==================== */
 .hero-section {
     background: var(--white);
@@ -425,6 +491,211 @@ body.dark-theme .btn-outline:hover {
     font-size: 1.25rem;
     color: var(--text-secondary);
     margin-bottom: 2.5rem;
+}
+
+/* Search Card */
+.search-card {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.search-form {
+    padding: 1.5rem;
+}
+
+.search-field {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.search-field i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.search-field input,
+.search-field select {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    transition: var(--transition-fast);
+}
+
+.search-field input:focus,
+.search-field select:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px var(--primary-blue-light);
+}
+
+.search-actions {
+    display: flex;
+    gap: 12px;
+    padding: 0 1.5rem 1.5rem;
+}
+
+.search-btn {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius-md);
+    background: var(--primary-blue);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.search-btn:hover {
+    background: var(--primary-blue-hover);
+    box-shadow: var(--shadow-md);
+}
+
+.clear-filters-btn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    background: var(--white);
+    color: var(--text-primary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.clear-filters-btn:hover {
+    background: var(--gray-50);
+}
+
+/* Map/List View Section */
+.map-section {
+    background: var(--gray-50);
+    padding: 3rem 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.section-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.view-toggle {
+    display: flex;
+    gap: 8px;
+    background: var(--gray-100);
+    padding: 4px;
+    border-radius: var(--border-radius-md);
+}
+
+.view-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.view-btn.active {
+    background: var(--white);
+    color: var(--primary-blue);
+    box-shadow: var(--shadow-sm);
+}
+
+.view-btn:hover:not(.active) {
+    color: var(--text-primary);
+}
+
+.map-container {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-placeholder {
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.map-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--primary-blue);
+}
+
+.list-container {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+}
+
+.results-count {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.results-info {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* Trending Section */
+.trending-section {
+    background: var(--white);
+    padding: 3rem 0;
+}
+
+.section-header-simple {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-icon {
+    font-size: 2rem;
 }
 
 /* ==================== SEARCH SECTION ==================== */
@@ -620,10 +891,86 @@ body.dark-theme .btn-outline:hover {
     margin-bottom: 1rem;
 }
 
-.job-listings {
+.job-listings, .job-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
     gap: 1.5rem;
+}
+
+/* Empty State Job Cards */
+.empty-state-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 1.5rem;
+}
+
+.job-card-empty {
+    background: var(--gray-100);
+    border: 2px dashed var(--border-color);
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.job-card-empty:hover {
+    border-color: var(--gray-400);
+    transform: none;
+}
+
+.empty-card-content {
+    text-align: center;
+    padding: 2rem;
+}
+
+.empty-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    background: var(--gray-200);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--text-tertiary);
+}
+
+.empty-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.empty-text {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    line-height: 1.5;
+}
+
+/* Dark theme empty state */
+body.dark-theme .job-card-empty {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .job-card-empty:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-theme .empty-icon {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+body.dark-theme .empty-title {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+body.dark-theme .empty-text {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .job-card {
@@ -646,6 +993,10 @@ body.dark-theme .btn-outline:hover {
     justify-content: space-between;
     align-items: start;
     margin-bottom: 1rem;
+}
+
+.job-title-section {
+    flex: 1;
 }
 
 .job-title {
@@ -716,6 +1067,22 @@ body.dark-theme .btn-outline:hover {
     overflow: hidden;
 }
 
+.job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+.job-tags .tag {
+    background: var(--gray-100);
+    color: var(--text-secondary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
 .job-footer {
     display: flex;
     align-items: center;
@@ -750,6 +1117,9 @@ body.dark-theme .btn-outline:hover {
     cursor: pointer;
     transition: var(--transition-fast);
     font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-view-job:hover, .view-job-btn:hover {

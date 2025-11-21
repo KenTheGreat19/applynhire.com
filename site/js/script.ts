@@ -355,37 +355,93 @@ function renderJobs(jobs: Job[], containerId: string = 'job-listings'): void {
   if (!container) return;
 
   if (jobs.length === 0) {
-    container.innerHTML = '<p class="no-results">No jobs found matching your criteria.</p>';
+    container.innerHTML = `
+      <div class="empty-state-grid">
+        ${Array(6).fill(0).map(() => `
+          <div class="job-card job-card-empty">
+            <div class="empty-card-content">
+              <div class="empty-icon">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <h3 class="empty-title">No Jobs Available</h3>
+              <p class="empty-text">Check back soon for new opportunities in this area</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
     return;
   }
 
   container.innerHTML = jobs.map(job => `
     <div class="job-card" data-job-id="${job.id}">
-      <div class="job-header">
-        <h3>${escapeHtml(job.title)}</h3>
-        <span class="job-type ${job.type}">${job.type.replace('-', ' ')}</span>
+      <div class="job-card-header">
+        <div class="job-title-section">
+          <h3 class="job-title">${escapeHtml(job.title)}</h3>
+          <div class="job-company">
+            <i class="fas fa-building"></i>
+            ${escapeHtml(job.company)}
+          </div>
+        </div>
+        <button class="btn-like" aria-label="Save job">
+          <i class="far fa-heart"></i>
+        </button>
       </div>
-      <div class="job-company">${escapeHtml(job.company)}</div>
-      <div class="job-location">
-        <i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.location)}
+      
+      <div class="job-meta">
+        <div class="job-meta-item">
+          <i class="fas fa-map-marker-alt"></i>
+          ${escapeHtml(job.location)}
+        </div>
+        <div class="job-meta-item">
+          <i class="fas fa-briefcase"></i>
+          ${job.type.replace('-', ' ')}
+        </div>
+        <div class="job-meta-item">
+          <i class="fas fa-dollar-sign"></i>
+          ${escapeHtml(job.salary)}
+        </div>
       </div>
-      <div class="job-salary">
-        <i class="fas fa-dollar-sign"></i> ${escapeHtml(job.salary)}
+
+      <div class="job-description">
+        ${escapeHtml(job.description.substring(0, 120))}...
       </div>
+
       <div class="job-tags">
-        ${job.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+        ${job.tags.slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
       </div>
-      <div class="job-posted">${escapeHtml(job.posted)}</div>
-      <button class="view-job-btn" data-job-id="${job.id}">View Details</button>
+
+      <div class="job-footer">
+        <div class="job-posted">
+          <i class="fas fa-clock"></i>
+          ${escapeHtml(job.posted)}
+        </div>
+        <button class="btn-view-job" data-job-id="${job.id}">
+          View Job
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
     </div>
   `).join('');
 
   // Add click handlers
-  container.querySelectorAll<HTMLButtonElement>('.view-job-btn').forEach(btn => {
+  container.querySelectorAll<HTMLButtonElement>('.btn-view-job').forEach(btn => {
     btn.addEventListener('click', () => {
       const jobId = btn.getAttribute('data-job-id');
       if (jobId) {
         showJobDetails(parseInt(jobId, 10));
+      }
+    });
+  });
+
+  // Add like button handlers
+  container.querySelectorAll<HTMLButtonElement>('.btn-like').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      btn.classList.toggle('liked');
+      const icon = btn.querySelector('i');
+      if (icon) {
+        icon.className = btn.classList.contains('liked') ? 'fas fa-heart' : 'far fa-heart';
       }
     });
   });
@@ -410,52 +466,116 @@ function escapeHtml(text: string): string {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
-  const searchForm = document.getElementById('job-search-form') as HTMLFormElement | null;
-  const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
-  const locationInput = document.getElementById('location-input') as HTMLInputElement | null;
-  const typeSelect = document.getElementById('type-select') as HTMLSelectElement | null;
-  const categorySelect = document.getElementById('category-select') as HTMLSelectElement | null;
+  // Get all necessary elements
+  const searchBtn = document.getElementById('searchBtn');
+  const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+  const jobTitleInput = document.getElementById('jobTitleInput') as HTMLInputElement | null;
+  const locationInput = document.getElementById('locationInput') as HTMLInputElement | null;
+  const jobTypeSelect = document.getElementById('jobTypeSelect') as HTMLSelectElement | null;
+  const minSalaryInput = document.getElementById('minSalaryInput') as HTMLInputElement | null;
+  
+  const mapViewBtn = document.getElementById('mapViewBtn');
+  const listViewBtn = document.getElementById('listViewBtn');
+  const mapContainer = document.getElementById('mapContainer');
+  const listContainer = document.getElementById('listContainer');
+  
+  const trendingJobsList = document.getElementById('trendingJobsList');
+  const searchJobsList = document.getElementById('searchJobsList');
 
-  // Initial render
-  renderJobs(jobsData);
+  // Initial render of trending jobs
+  if (trendingJobsList) {
+    renderJobs(jobsData.slice(0, 6), 'trendingJobsList');
+  }
+
+  // Initial render of search results (show all jobs)
+  if (searchJobsList) {
+    renderJobs(jobsData, 'searchJobsList');
+  }
+
+  // Update search results count
+  const searchResultsCount = document.getElementById('searchResultsCount');
+  if (searchResultsCount) {
+    searchResultsCount.textContent = jobsData.length.toString();
+  }
 
   // Search functionality
-  if (searchForm) {
-    searchForm.addEventListener('submit', (e: Event) => {
-      e.preventDefault();
-      
+  if (searchBtn) {
+    searchBtn.addEventListener('click', () => {
       const filters: JobFilters = {
-        search: searchInput?.value || undefined,
+        search: jobTitleInput?.value || undefined,
         location: locationInput?.value || undefined,
-        type: typeSelect?.value || undefined,
-        category: categorySelect?.value || undefined
+        type: jobTypeSelect?.value || undefined
       };
 
       const filtered = filterJobs(jobsData, filters);
-      renderJobs(filtered);
+      if (searchJobsList) {
+        renderJobs(filtered, 'searchJobsList');
+      }
+      if (searchResultsCount) {
+        searchResultsCount.textContent = filtered.length.toString();
+      }
     });
   }
 
-  // Real-time filtering
-  [searchInput, locationInput, typeSelect, categorySelect].forEach(element => {
-    element?.addEventListener('input', () => {
-      const filters: JobFilters = {
-        search: searchInput?.value || undefined,
-        location: locationInput?.value || undefined,
-        type: typeSelect?.value || undefined,
-        category: categorySelect?.value || undefined
-      };
-
-      const filtered = filterJobs(jobsData, filters);
-      renderJobs(filtered);
+  // Clear filters
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener('click', () => {
+      if (jobTitleInput) jobTitleInput.value = '';
+      if (locationInput) locationInput.value = '';
+      if (jobTypeSelect) jobTypeSelect.value = '';
+      if (minSalaryInput) minSalaryInput.value = '';
+      
+      if (searchJobsList) {
+        renderJobs(jobsData, 'searchJobsList');
+      }
+      if (searchResultsCount) {
+        searchResultsCount.textContent = jobsData.length.toString();
+      }
     });
-  });
+  }
 
-  // Try to fetch from API
+  // View toggle (Map/List)
+  if (mapViewBtn && listViewBtn && mapContainer && listContainer) {
+    mapViewBtn.addEventListener('click', () => {
+      mapViewBtn.classList.add('active');
+      listViewBtn.classList.remove('active');
+      mapContainer.style.display = 'block';
+      listContainer.style.display = 'none';
+    });
+
+    listViewBtn.addEventListener('click', () => {
+      listViewBtn.classList.add('active');
+      mapViewBtn.classList.remove('active');
+      listContainer.style.display = 'block';
+      mapContainer.style.display = 'none';
+    });
+  }
+
+  // Close promo banner
+  const closeBanner = document.getElementById('closeBanner');
+  const promoBanner = document.getElementById('promoBanner');
+  if (closeBanner && promoBanner) {
+    closeBanner.addEventListener('click', () => {
+      promoBanner.style.display = 'none';
+    });
+  }
+
+  // Try to fetch from API (optional)
   fetchJobs().then(response => {
-    if (response.success && response.data) {
-      renderJobs(response.data);
+    if (response.success && response.data && response.data.length > 0) {
+      if (trendingJobsList) {
+        renderJobs(response.data.slice(0, 6), 'trendingJobsList');
+      }
+      if (searchJobsList) {
+        renderJobs(response.data, 'searchJobsList');
+      }
+      if (searchResultsCount) {
+        searchResultsCount.textContent = response.data.length.toString();
+      }
     }
+  }).catch(() => {
+    // Silently fail and use local data
+    console.log('Using local job data');
   });
 });
 
