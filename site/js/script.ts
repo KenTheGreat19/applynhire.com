@@ -354,26 +354,12 @@ function renderJobs(jobs: Job[], containerId: string = 'job-listings'): void {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  if (jobs.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state-grid">
-        ${Array(6).fill(0).map(() => `
-          <div class="job-card job-card-empty">
-            <div class="empty-card-content">
-              <div class="empty-icon">
-                <i class="fas fa-briefcase"></i>
-              </div>
-              <h3 class="empty-title">No Jobs Available</h3>
-              <p class="empty-text">Check back soon for new opportunities in this area</p>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = jobs.map(job => `
+  // Determine how many empty cards to show
+  const minCards = 6;
+  const emptyCardsNeeded = Math.max(0, minCards - jobs.length);
+  
+  // Create job cards HTML
+  const jobCardsHtml = jobs.map(job => `
     <div class="job-card" data-job-id="${job.id}">
       <div class="job-card-header">
         <div class="job-title-section">
@@ -423,6 +409,22 @@ function renderJobs(jobs: Job[], containerId: string = 'job-listings'): void {
       </div>
     </div>
   `).join('');
+
+  // Create empty cards HTML
+  const emptyCardsHtml = emptyCardsNeeded > 0 ? Array(emptyCardsNeeded).fill(0).map(() => `
+    <div class="job-card job-card-empty">
+      <div class="empty-card-content">
+        <div class="empty-icon">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <h3 class="empty-title">No Jobs Available</h3>
+        <p class="empty-text">Check back soon for new opportunities in this area</p>
+      </div>
+    </div>
+  `).join('') : '';
+
+  // Render directly without wrapper (container already has grid class)
+  container.innerHTML = jobCardsHtml + emptyCardsHtml;
 
   // Add click handlers
   container.querySelectorAll<HTMLButtonElement>('.btn-view-job').forEach(btn => {

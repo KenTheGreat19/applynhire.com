@@ -897,6 +897,14 @@ body.dark-theme .btn-outline:hover {
     gap: 1.5rem;
 }
 
+/* Job Listings Grid */
+.job-listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
 /* Empty State Job Cards */
 .empty-state-grid {
     display: grid;
