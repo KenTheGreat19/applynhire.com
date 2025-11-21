@@ -38,7 +38,60 @@ function onKeyDown(e: KeyboardEvent): void {
   }
 }
 
+// Theme Toggle Functionality
+function toggleTheme(): void {
+  const body = document.body;
+  const themeToggle = document.getElementById('themeToggle');
+  const icon = themeToggle?.querySelector('i');
+  
+  if (body.classList.contains('dark-theme')) {
+    body.classList.remove('dark-theme');
+    body.classList.add('light-theme');
+    if (icon) {
+      icon.className = 'fas fa-moon';
+    }
+    localStorage.setItem('theme', 'light');
+  } else {
+    body.classList.remove('light-theme');
+    body.classList.add('dark-theme');
+    if (icon) {
+      icon.className = 'fas fa-sun';
+    }
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
+function initTheme(): void {
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  const body = document.body;
+  const themeToggle = document.getElementById('themeToggle');
+  const icon = themeToggle?.querySelector('i');
+  
+  if (savedTheme === 'dark') {
+    body.classList.add('dark-theme');
+    body.classList.remove('light-theme');
+    if (icon) {
+      icon.className = 'fas fa-sun';
+    }
+  } else {
+    body.classList.add('light-theme');
+    body.classList.remove('dark-theme');
+    if (icon) {
+      icon.className = 'fas fa-moon';
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize theme
+  initTheme();
+  
+  // Theme toggle listener
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+  
   const rightNav = document.querySelector<HTMLElement>('.right-nav');
   if (!rightNav) return;
 

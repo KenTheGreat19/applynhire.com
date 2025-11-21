@@ -70,6 +70,53 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dark Theme */
+body.dark-theme {
+    --gray-50: #1a1a1a;
+    --gray-100: #2d2d2d;
+    --white: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-tertiary: #9ca3af;
+    --border-color: #374151;
+}
+
+body.dark-theme .site-header {
+    background: var(--primary-blue);
+    border-bottom-color: var(--primary-blue-dark);
+}
+
+body.dark-theme .site-title {
+    -webkit-text-fill-color: var(--white);
+    color: var(--white);
+}
+
+body.dark-theme .tagline {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+body.dark-theme .lang-btn,
+body.dark-theme .theme-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+}
+
+body.dark-theme .lang-btn:hover,
+body.dark-theme .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-theme .btn-outline {
+    border-color: var(--white);
+    color: var(--white);
+}
+
+body.dark-theme .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 .sr-only {
     position: absolute !important;
     height: 1px; 

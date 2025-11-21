@@ -23,7 +23,6 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
-    role: str
 
 
 class UserRead(BaseModel):
