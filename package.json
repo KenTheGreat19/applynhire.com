@@ -1,5 +1,18 @@
 {
+  "name": "applynhire",
+  "version": "1.0.0",
+  "description": "Job aggregator platform",
+  "scripts": {
+    "type-check": "tsc --project config/tsconfig.json --noEmit",
+    "build": "tsc --project config/tsconfig.json",
+    "dev": "http-server site -p 8080"
+  },
   "dependencies": {
     "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.8",
+    "typescript": "^5.3.3",
+    "http-server": "^14.1.1"
   }
 }

@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employer Sign In - APPLY N HIRE</title>
+    <title>Applicant Dashboard - APPLY N HIRE</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" href="vendor/images/logo.png" type="image/png">
     <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <meta name="robots" content="noindex" />
-</head>
+  </head>
 <body>
     <header class="site-header">
         <div class="container header-row header-content">
@@ -54,6 +52,7 @@
                     <span class="sr-only">Toggle theme</span>
                 </button>
 
+                <!-- Employer / Sign in -->
                 <a href="employer.html" class="for-employers-btn">For Employers</a>
                 <a href="applicant.html" class="sign-in-btn">Sign In</a>
 
@@ -67,31 +66,13 @@
         </div>
     </header>
 
-    <main class="container auth-page">
-        <div class="auth-card">
-            <div id="message" class="auth-message"></div>
-            <div class="auth-avatar employer" aria-hidden="true"><i class="fas fa-briefcase"></i></div>
-            <h2>Employer Sign In</h2>
-            <p class="tagline">Welcome back! Post jobs for free.</p>
-            <div class="social-buttons">
-                <button class="btn social"><i class="fab fa-google"></i> Continue with Google</button>
-                <button class="btn social"><i class="fab fa-yahoo"></i> Continue with Yahoo</button>
-                <button class="btn social"><i class="fab fa-microsoft"></i> Continue with Outlook</button>
-            </div>
-            <div class="or-line">OR CONTINUE WITH EMAIL</div>
-            <form id="signInForm" class="auth-form">
-                <label for="signinEmail">Email</label>
-                <input id="signinEmail" name="email" type="email" placeholder="you@company.com" required>
-
-                <label for="signinPassword">Password</label>
-                <input id="signinPassword" name="password" type="password" placeholder="Password" required>
-
-                <input type="hidden" id="signinRole" name="role" value="employer">
-
-                <button type="submit" class="primary-btn">Sign In</button>
-                <p class="form-note">Don't have an employer account? <a href="employer-signup.html">Create one</a></p>
-                <div class="auth-legal">By clicking any of the 'Continue' options, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</div>
-            </form>
+    <main class="container profile-page">
+        <div class="profile-card">
+            <h2 id="welcome">Hello, Applicant</h2>
+            <p id="email"></p>
+            <p id="role"></p>
+            <p>Use the main site to search and apply for jobs.</p>
+            <button id="signOutBtn" class="secondary-btn">Sign Out</button>
         </div>
     </main>
 
@@ -101,9 +82,28 @@
         </div>
     </footer>
 
-    <script src="js/siteAuth.js"></script>
-    <script src="js/header.js"></script>
-    <script src="js/auth-common.js"></script>
-    <script src="js/auth-forms.js"></script>
+    <script type="module" src="js/header.ts"></script>
+    <script>
+        // Basic session check
+        function getSession() {
+            const raw = localStorage.getItem('applynhireSession');
+            return raw ? JSON.parse(raw) : null;
+        }
+
+        const session = getSession();
+        if (!session || session.role !== 'applicant') {
+            alert('You are not signed in as an applicant. Redirecting to Sign In.');
+            location.href = 'applicant.html';
+        } else {
+            document.getElementById('welcome').textContent = `Hello, ${session.name || 'Applicant'}`;
+            document.getElementById('email').textContent = session.email;
+            document.getElementById('role').textContent = `Role: ${session.role}`;
+        }
+
+        document.getElementById('signOutBtn').addEventListener('click', () => {
+            localStorage.removeItem('applynhireSession');
+            location.href = 'applicant.html';
+        });
+    </script>
 </body>
 </html>
