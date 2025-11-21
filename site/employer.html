@@ -11,15 +11,55 @@
 </head>
 <body>
     <header class="site-header">
-        <div class="container header-row">
+        <div class="container header-row header-content">
             <div class="brand">
-                <a class="site-logo" href="index.html"><img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE"> APPLY N HIRE</a>
-                <p class="tagline">Manage job postings and applicants</p>
+                <a class="site-logo" href="index.html">
+                    <img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE">
+                    <span class="site-title">APPLY N HIRE</span>
+                </a>
+                <p class="tagline">Apply Job and Hire Talent for Free!</p>
             </div>
-            <div class="right-nav">
+
+            <div class="header-actions right-nav">
+                <div class="language-selector" id="languageSelector">
+                    <button class="lang-btn" id="langBtn" aria-expanded="false" aria-haspopup="true" aria-controls="langDropdown">
+                        <span class="flag-icon" aria-hidden="true">🇬🇧</span>
+                        <span class="sr-only">Change language</span>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown" role="menu" aria-hidden="true">
+                        <button class="lang-option" data-lang="en" role="menuitem">
+                            <span class="flag-icon">🇬🇧</span>
+                            <span>English</span>
+                        </button>
+                        <button class="lang-option" data-lang="es" role="menuitem">
+                            <span class="flag-icon">🇪🇸</span>
+                            <span>Español</span>
+                        </button>
+                        <button class="lang-option" data-lang="fr" role="menuitem">
+                            <span class="flag-icon">🇫🇷</span>
+                            <span>Français</span>
+                        </button>
+                        <button class="lang-option" data-lang="de" role="menuitem">
+                            <span class="flag-icon">🇩🇪</span>
+                            <span>Deutsch</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-pressed="false">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                    <span class="sr-only">Toggle theme</span>
+                </button>
+
                 <a href="employer.html" class="for-employers-btn">For Employers</a>
-                <a href="applicant.html" class="sign-in-btn">For Applicant</a>
-                <nav class="auth-nav"></nav>
+                <a href="applicant.html" class="sign-in-btn">Sign In</a>
+
+                <nav class="auth-nav" aria-label="Authentication Navigation"></nav>
+
+                <a href="../admin.html" class="admin-link" title="Admin Dashboard" aria-label="Admin Dashboard">
+                    <i class="fas fa-cog" aria-hidden="true"></i>
+                    <span class="admin-text">Admin</span>
+                </a>
             </div>
         </div>
     </header>

@@ -6,18 +6,51 @@
     <title>Auth - APPLY N HIRE</title>
     <link rel="stylesheet" href="site/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="vendor/images/logo.png" type="image/png">
-    <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
-    <header class="site-header">
-        <div class="container header-row">
-            <div class="brand">
-                <a class="site-logo" href="index.html"><img class="site-logo-img" src="vendor/images/logo.svg" alt="APPLY N HIRE"> APPLY N HIRE</a>
-                <p class="tagline">Sign in or sign up to continue</p>
+        <link rel="icon" href="vendor/images/logo.png" type="image/png">
+        <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="container header-row header-content">
+                <div class="brand">
+                    <a class="site-logo" href="index.html">
+                        <img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE">
+                        <span class="site-title">APPLY N HIRE</span>
+                    </a>
+                    <p class="tagline">Apply Job and Hire Talent for Free!</p>
+                </div>
+
+                <div class="header-actions right-nav">
+                    <div class="language-selector" id="languageSelector">
+                        <button class="lang-btn" id="langBtn" aria-expanded="false" aria-haspopup="true" aria-controls="langDropdown">
+                            <span class="flag-icon" aria-hidden="true">🇬🇧</span>
+                            <span class="sr-only">Change language</span>
+                        </button>
+                        <div class="lang-dropdown" id="langDropdown" role="menu" aria-hidden="true">
+                            <button class="lang-option" data-lang="en" role="menuitem"> <span class="flag-icon">🇬🇧</span> <span>English</span> </button>
+                            <button class="lang-option" data-lang="es" role="menuitem"> <span class="flag-icon">🇪🇸</span> <span>Español</span> </button>
+                            <button class="lang-option" data-lang="fr" role="menuitem"> <span class="flag-icon">🇫🇷</span> <span>Français</span> </button>
+                            <button class="lang-option" data-lang="de" role="menuitem"> <span class="flag-icon">🇩🇪</span> <span>Deutsch</span> </button>
+                        </div>
+                    </div>
+
+                    <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-pressed="false">
+                        <i class="fas fa-moon" aria-hidden="true"></i>
+                        <span class="sr-only">Toggle theme</span>
+                    </button>
+
+                    <a href="site/employer.html" class="for-employers-btn">For Employers</a>
+                    <a href="site/applicant.html" class="sign-in-btn">For Applicant</a>
+
+                    <nav class="auth-nav" aria-label="Authentication Navigation"></nav>
+
+                    <a href="admin.html" class="admin-link" title="Admin Dashboard" aria-label="Admin Dashboard">
+                        <i class="fas fa-cog" aria-hidden="true"></i>
+                        <span class="admin-text">Admin Dashboard</span>
+                    </a>
+                </div>
             </div>
-            <div class="right-nav"><nav class="auth-nav"></nav></div>
-        </div>
-    </header>
-    </header>
+        </header>
 
     <main class="container auth-page">
         <div class="auth-card" style="text-align:center;">
