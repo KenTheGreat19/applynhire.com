@@ -4,13 +4,14 @@
 
 help:
 	@echo "ApplyNHire - Available Commands:"
-	@echo "  make install     - Install all dependencies"
-	@echo "  make dev         - Start development servers"
-	@echo "  make build       - Build for production"
-	@echo "  make test        - Run all tests"
-	@echo "  make lint        - Lint code"
-	@echo "  make format      - Format code"
-	@echo "  make clean       - Clean build artifacts"
+	@echo "  make install         - Install all dependencies"
+	@echo "  make dev             - Start development servers"
+	@echo "  make build           - Build for production"
+	@echo "  make test            - Run all tests"
+	@echo "  make lint            - Lint code"
+	@echo "  make format          - Format code"
+	@echo "  make clean           - Clean build artifacts"
+	@echo "  make organize-docs   - Organize markdown files into documentation folder"
 
 install:
 	@echo "Installing frontend dependencies..."
@@ -54,3 +55,7 @@ clean:
 	rm -rf backend/**/__pycache__/
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
+
+.PHONY: organize-docs
+organize-docs:
+	@bash scripts/organize-docs.sh
