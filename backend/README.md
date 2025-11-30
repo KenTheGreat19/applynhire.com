@@ -13,18 +13,6 @@ $env:JWT_SECRET='ReplaceWithYourSecret'; uvicorn app:app --reload --host 0.0.0.0
 ```
 3. Visit http://127.0.0.1:8000/docs to see API docs.
 
-Import demo jobs using helper script
-----------------------------------
-This repository includes a convenience script to import demo jobs into the running backend from `site/script.js`. This is useful to migrate frontend demo data into the backend db during testing.
-
-1. Ensure the backend server is running and you have set `ADMIN_SECRET` in your environment.
-2. Run the script:
-```powershell
-cd backend
-$env:API_BASE='http://127.0.0.1:8000'; $env:ADMIN_SECRET='replace-with-admin-secret'; python import_demo.py
-```
-You can also use the admin endpoint directly by posting the array of demo jobs to `/api/import-demo-jobs` with header `X-Admin-Secret` set.
-
 Example requests (curl):
 
 ```powershell
@@ -49,33 +37,6 @@ curl -X POST "http://127.0.0.1:8000/api/jobs" -H "Authorization: Bearer <token>"
 # Apply for job
 curl -X POST "http://127.0.0.1:8000/api/jobs/1/apply" -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d '{"job_id":1,"name":"Applicant","email":"applicant@example.com","cover_letter":"I am interested"}'
 ```
-
-Admin import examples (use ADMIN_SECRET as the X-Admin-Secret header, or include ?admin_secret= in request):
-```powershell
-# Import demo accounts
-curl -X POST "http://127.0.0.1:8000/api/import-demo-accounts" -H "Content-Type: application/json" -d '[{"name":"Demo User","email":"demo@example.com","password":"pass123","role":"applicant"}]' -H "X-Admin-Secret: replace-with-admin-secret"
-
-# Import demo jobs
-curl -X POST "http://127.0.0.1:8000/api/import-demo-jobs" -H "Content-Type: application/json" -d '[{"title":"Imported Job","company":"Acme","location":"Remote","type":"full-time","category":"technology"}]' -H "X-Admin-Secret: replace-with-admin-secret"
-
-Browser snippet for migrating localStorage accounts into backend
-----------------------------------------------------------------
-If you have demo accounts stored in localStorage under `applynhireAccounts`, you can run this snippet in the browser console to post them to the backend import endpoint:
-
-```javascript
-// NOTE: The project was rebranded to APPLY N HIRE and localStorage keys renamed.
-// The migration helper will migrate values from legacy keys into new keys automatically.
-const accounts = JSON.parse(localStorage.getItem('applynhireAccounts') || '[]');
-fetch('http://127.0.0.1:8000/api/import-demo-accounts', {
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': 'replace-with-admin-secret' },
-	body: JSON.stringify(accounts)
-}).then(r => r.json()).then(console.log).catch(console.error);
-```
-
-```
-
-
 
 Notes
 - This backend uses SQLite to persist users under `./backend/db.sqlite`.
