@@ -1,196 +1,241 @@
-# ApplyNHire - Job Aggregator Platform
+# ApplyNHire - Enterprise Job Platform
 
-> Free job posting and application platform built with TypeScript and FastAPI
+[![CI/CD](https://github.com/KenTheGreat19/applynhire.com/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/KenTheGreat19/applynhire.com/actions)
 
-## 🚀 Quick Start
+> Professional job aggregator platform built with TypeScript and FastAPI
 
-```bash
-# Install dependencies
-npm install
+## 🏗️ Enterprise Architecture
 
-# Start frontend dev server
-npm run dev
-# Opens http://localhost:8080
-
-# Start backend (separate terminal)
-cd backend
-python -m uvicorn app:app --host 0.0.0.0 --port 8000
-# API at http://127.0.0.1:8000
-```
-
-## 📁 Project Structure
+This project follows enterprise-level best practices with clear separation of concerns, comprehensive testing, and production-ready configuration.
 
 ```
 applynhire.com/
-├── 📚 docs/              # All documentation
-├── ⚙️  config/           # Configuration files
-├── 🌐 site/             # Frontend application
-│   ├── pages/           # HTML pages
-│   ├── js/              # TypeScript source
-│   └── assets/          # CSS, images, vendor files
-├── 🐍 backend/          # Python FastAPI backend
-└── 📦 node_modules/     # NPM dependencies
+├── 📁 src/                  # Frontend source code
+│   ├── components/          # UI components
+│   ├── services/            # Business logic & API calls
+│   ├── utils/               # Utility functions
+│   ├── types/               # TypeScript definitions
+│   └── config/              # App configuration
+├── 📁 public/               # Static assets & HTML
+│   ├── pages/               # HTML pages
+│   └── assets/              # CSS, images, vendor libs
+├── 📁 backend/              # Python FastAPI backend
+│   ├── api/                 # API routes
+│   │   └── routers/         # Route handlers
+│   ├── core/                # Core configuration
+│   ├── db/                  # Database setup
+│   ├── services/            # Business services
+│   ├── models.py            # Data models
+│   └── main.py              # App entry point
+├── 📁 tests/                # Test suites
+├── 📁 dist/                 # Build output
+├── 📁 docs/                 # Documentation
+├── 📁 config/               # Build configuration
+└── 📁 .github/              # CI/CD workflows
 ```
 
-**See [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for detailed structure.**
+## 🚀 Quick Start
 
-## 📚 Documentation
+### Prerequisites
+- Node.js >= 18.0.0
+- Python >= 3.10
+- npm >= 9.0.0
 
-All documentation is in the `docs/` folder:
+### Installation
 
-- **[PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)** - Complete project organization
-- **[TYPESCRIPT_MIGRATION.md](docs/TYPESCRIPT_MIGRATION.md)** - TypeScript conversion guide
-- **[TYPESCRIPT_SUMMARY.md](docs/TYPESCRIPT_SUMMARY.md)** - Quick TypeScript reference
-- **[ORGANIZATION_COMPLETE.md](docs/ORGANIZATION_COMPLETE.md)** - Organization summary
-- **[DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)** - Design system guidelines
-- **[DESIGN_IMPROVEMENTS.md](docs/DESIGN_IMPROVEMENTS.md)** - Design enhancements
-- **[IMPLEMENTATION_CHECKLIST.md](docs/IMPLEMENTATION_CHECKLIST.md)** - Task checklist
+```bash
+# Install frontend dependencies
+npm install
 
-## 🛠️ Technology Stack
+# Install backend dependencies
+cd backend
+pip install -r requirements.txt
+cd ..
+```
 
-### Frontend
-- **TypeScript** - Type-safe JavaScript
-- **HTML5/CSS3** - Modern web standards
-- **Leaflet** - Interactive maps
-- **ES Modules** - Native browser modules
+### Development
 
-### Backend
-- **FastAPI** - Modern Python web framework
-- **SQLModel** - SQL database ORM
-- **Pydantic** - Data validation
-- **SQLite** - Database
+```bash
+# Terminal 1: Start frontend dev server
+npm run dev
+# Opens at http://localhost:8080
+
+# Terminal 2: Start backend API
+cd backend
+python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+# API at http://127.0.0.1:8000
+# Docs at http://127.0.0.1:8000/docs
+```
 
 ## 📦 NPM Scripts
 
-```bash
-# Type check TypeScript
-npm run type-check
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run type-check` | Check TypeScript types |
+| `npm run lint` | Lint TypeScript code |
+| `npm run lint:fix` | Fix linting issues |
+| `npm run format` | Format code with Prettier |
+| `npm run test` | Run tests |
+| `npm run clean` | Clean build directory |
 
-# Build TypeScript (optional)
+## 🧪 Testing
+
+```bash
+# Frontend (coming soon)
+npm test
+
+# Backend
+pytest tests/ -v
+
+# With coverage
+pytest tests/ --cov=backend --cov-report=html
+```
+
+## 📋 Features
+
+### Frontend
+- ✅ TypeScript for type safety
+- ✅ Modular component architecture
+- ✅ Centralized service layer
+- ✅ ESLint & Prettier configured
+- ✅ Path aliases (@components, @services, etc.)
+
+### Backend
+- ✅ FastAPI with async support
+- ✅ SQLModel ORM
+- ✅ JWT authentication
+- ✅ Router-based architecture
+- ✅ Service layer pattern
+- ✅ Comprehensive testing
+- ✅ API documentation (OpenAPI)
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+```bash
+cp .env.example .env
+```
+
+Key variables:
+- `JWT_SECRET_KEY` - Secret for JWT tokens
+- `DATABASE_URL` - Database connection string
+- `CORS_ORIGINS` - Allowed origins
+
+### TypeScript Configuration
+
+TypeScript is configured in `config/tsconfig.json` with:
+- Strict mode enabled
+- Path aliases configured
+- Source maps for debugging
+- ES2022 target
+
+## 📚 API Documentation
+
+Once the backend is running, visit:
+- Swagger UI: http://127.0.0.1:8000/docs
+- ReDoc: http://127.0.0.1:8000/redoc
+
+### Key Endpoints
+
+**Authentication**
+- `POST /api/v1/auth/signup` - Register new user
+- `POST /api/v1/auth/signin` - Sign in
+- `GET /api/v1/auth/profile` - Get user profile
+
+**Jobs**
+- `GET /api/v1/jobs` - List jobs (with filters)
+- `POST /api/v1/jobs` - Create job (employer only)
+- `GET /api/v1/jobs/{id}` - Get job details
+- `PUT /api/v1/jobs/{id}` - Update job
+- `DELETE /api/v1/jobs/{id}` - Delete job
+
+## 🏛️ Architecture Patterns
+
+### Frontend
+- **Components**: Reusable UI components
+- **Services**: API integration & business logic
+- **Utils**: Helper functions & utilities
+- **Types**: Centralized TypeScript definitions
+
+### Backend
+- **Routers**: Route handlers grouped by feature
+- **Services**: Business logic layer
+- **Models**: Data models and schemas
+- **Middleware**: Cross-cutting concerns
+- **Core**: Application configuration
+
+## 🔒 Security
+
+- JWT-based authentication
+- Password hashing with bcrypt
+- CORS configuration
+- Input validation with Pydantic
+- SQL injection prevention with SQLModel
+
+## 🚢 Deployment
+
+### Frontend
+```bash
 npm run build
-
-# Start dev server
-npm run dev
+# Deploy dist/ folder to static hosting
 ```
 
-## ✨ Features
-
-- ✅ **Job Listings** - Browse 12+ sample jobs
-- ✅ **Search & Filter** - By keyword, location, type, category
-- ✅ **Authentication** - Sign in/sign up for applicants and employers
-- ✅ **Responsive Design** - Mobile-friendly interface
-- ✅ **Type Safety** - Full TypeScript support
-- ✅ **API Ready** - FastAPI backend integration
-
-## 🎯 Key Files
-
-| File | Purpose |
-|------|---------|
-| `site/index.html` | Main landing page |
-| `site/types.ts` | TypeScript type definitions |
-| `site/js/script.ts` | Job aggregator logic |
-| `backend/app.py` | FastAPI server |
-| `config/tsconfig.json` | TypeScript configuration |
-
-## 📖 Getting Started
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/KenTheGreat19/applynhire.com.git
-   cd applynhire.com
-   ```
-
-2. **Install frontend dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Install backend dependencies**
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   cd ..
-   ```
-
-4. **Start development servers**
-   ```bash
-   # Terminal 1: Frontend
-   npm run dev
-   
-   # Terminal 2: Backend
-   cd backend && python -m uvicorn app:app --host 0.0.0.0 --port 8000
-   ```
-
-5. **Open your browser**
-   - Frontend: http://localhost:8080
-   - Backend API: http://127.0.0.1:8000
-   - API Docs: http://127.0.0.1:8000/docs
-
-## 🧪 Development
-
-### Type Checking
+### Backend
 ```bash
-npm run type-check
+# Production mode
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
 
-### Adding New Features
-
-- **New page**: Add to `site/pages/`
-- **New TypeScript**: Add to `site/js/`
-- **New styles**: Add to `site/assets/css/`
-- **New docs**: Add to `docs/`
-
-### Code Structure
-
-```typescript
-// site/types.ts - Define types
-export interface Job {
-  id: number;
-  title: string;
-  company: string;
-  // ...
-}
-
-// site/js/script.ts - Use types
-import type { Job } from '../types';
-
-const jobs: Job[] = [
-  { id: 1, title: "Developer", ... }
-];
+### Docker (Coming Soon)
+```bash
+docker-compose up
 ```
 
-## 🏗️ Project Organization
+## 📖 Documentation
 
-✅ **Clean Structure** - Professional folder organization  
-✅ **Documentation** - All docs in `docs/` folder  
-✅ **Configuration** - Centralized in `config/`  
-✅ **Type Safety** - Full TypeScript support  
-✅ **Scalable** - Easy to extend and maintain  
+Comprehensive documentation in the `docs/` folder:
+- [Project Structure](docs/PROJECT_STRUCTURE.md)
+- [TypeScript Guide](docs/TYPESCRIPT_MIGRATION.md)
+- [Design System](docs/DESIGN_SYSTEM.md)
+- [API Documentation](docs/API.md)
 
 ## 🤝 Contributing
 
-1. Read the documentation in `docs/`
-2. Follow the existing code structure
-3. Use TypeScript for all new code
-4. Test your changes locally
-5. Submit pull requests
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Code Quality
+
+Before submitting:
+```bash
+npm run lint:fix
+npm run format
+npm run type-check
+pytest tests/
+```
 
 ## 📝 License
 
-This project is free and open source.
+This project is licensed under the MIT License.
+
+## 👥 Team
+
+Built with ❤️ by KenTheGreat19
 
 ## 🔗 Links
 
-- **Repository**: https://github.com/KenTheGreat19/applynhire.com
-- **Issues**: https://github.com/KenTheGreat19/applynhire.com/issues
-- **Documentation**: [docs/](docs/)
-
-## 💡 Need Help?
-
-- Check [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) for structure details
-- See [docs/TYPESCRIPT_SUMMARY.md](docs/TYPESCRIPT_SUMMARY.md) for TypeScript help
-- Review [docs/ORGANIZATION_COMPLETE.md](docs/ORGANIZATION_COMPLETE.md) for organization info
+- [Repository](https://github.com/KenTheGreat19/applynhire.com)
+- [Issues](https://github.com/KenTheGreat19/applynhire.com/issues)
+- [Discussions](https://github.com/KenTheGreat19/applynhire.com/discussions)
 
 ---
 
-**Built with ❤️ using TypeScript and FastAPI**
+**Enterprise-grade job platform - TypeScript + FastAPI**

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Sign In - Apply N Hire</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-theme">
+    <header class="site-header">
+        <div class="container header-row header-content">
+            <div class="brand">
+                <a class="site-logo" href="../index.html">
+                    <img class="site-logo-img" src="../assets/vendor/images/logo.png" onerror="this.onerror=null;this.src='../assets/vendor/images/logo.svg'" alt="APPLY N HIRE">
+                    <span class="site-title">APPLY N HIRE</span>
+                </a>
+                <p class="tagline">Apply Job and Hire Talent for Free!</p>
+            </div>
+            <div class="header-actions right-nav">
+                <div class="language-selector" id="languageSelector">
+                    <button class="lang-btn" id="langBtn" aria-expanded="false" aria-haspopup="true" aria-controls="langDropdown">
+                        <span class="flag-icon" aria-hidden="true">🇬🇧</span>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown" role="menu" aria-hidden="true">
+                        <button class="lang-option" data-lang="en" role="menuitem"><span class="flag-icon">🇬🇧</span><span>English</span></button>
+                        <button class="lang-option" data-lang="es" role="menuitem"><span class="flag-icon">🇪🇸</span><span>Español</span></button>
+                        <button class="lang-option" data-lang="fr" role="menuitem"><span class="flag-icon">🇫🇷</span><span>Français</span></button>
+                        <button class="lang-option" data-lang="de" role="menuitem"><span class="flag-icon">🇩🇪</span><span>Deutsch</span></button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-pressed="false">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+                <a href="sign-in-applicant.html" class="btn-outline btn-applicant">For Applicant</a>
+                <a href="sign-up.html" class="btn-primary btn-employer">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <div class="auth-card employer">
+            <div class="auth-avatar employer"><i class="fas fa-briefcase"></i></div>
+            <h2>Employer Sign In</h2>
+            <p class="muted">Welcome back! Hire the best talent.</p>
+
+            <form class="auth-form" id="employerSignInForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="employer@company.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                <div id="errorMessage" class="error-message" style="display: none; color: #ef4444; margin-bottom: 1rem;"></div>
+                <button type="submit" class="btn-auth-primary">Sign In</button>
+            </form>
+
+            <div class="auth-legal">
+                <p>By signing in, you agree to our <a href="terms.html">Terms</a>, <a href="cookies.html">Cookie</a>, and <a href="privacy.html">Privacy</a> policies.</p>
+            </div>
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="sign-up.html">Sign up</a></p>
+                <p>Looking for a job? <a href="sign-in-applicant.html">Applicant sign in →</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="../js/header.js"></script>
+    <script type="module">
+        document.getElementById('employerSignInForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const email = form.email.value;
+            const password = form.password.value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/signin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Sign in failed');
+                }
+
+                const data = await response.json();
+                
+                // Check if user is employer
+                if (data.user.role !== 'employer') {
+                    errorMessage.textContent = 'This account is not registered as an employer.';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+
+                // Save session
+                localStorage.setItem('applynhireSession', JSON.stringify({
+                    token: data.access_token,
+                    user: data.user
+                }));
+
+                // Redirect to employer dashboard (create this page or use employer.html)
+                window.location.href = '../index.html';
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

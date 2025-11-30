@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Sign Up - Apply N Hire</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-theme">
+    <header class="site-header">
+        <div class="container header-row header-content">
+            <div class="brand">
+                <a class="site-logo" href="../index.html">
+                    <img class="site-logo-img" src="../assets/vendor/images/logo.png" onerror="this.onerror=null;this.src='../assets/vendor/images/logo.svg'" alt="APPLY N HIRE">
+                    <span class="site-title">APPLY N HIRE</span>
+                </a>
+                <p class="tagline">Apply Job and Hire Talent for Free!</p>
+            </div>
+            <div class="header-actions right-nav">
+                <div class="language-selector" id="languageSelector">
+                    <button class="lang-btn" id="langBtn" aria-expanded="false" aria-haspopup="true" aria-controls="langDropdown">
+                        <span class="flag-icon" aria-hidden="true">🇬🇧</span>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown" role="menu" aria-hidden="true">
+                        <button class="lang-option" data-lang="en" role="menuitem"><span class="flag-icon">🇬🇧</span><span>English</span></button>
+                        <button class="lang-option" data-lang="es" role="menuitem"><span class="flag-icon">🇪🇸</span><span>Español</span></button>
+                        <button class="lang-option" data-lang="fr" role="menuitem"><span class="flag-icon">🇫🇷</span><span>Français</span></button>
+                        <button class="lang-option" data-lang="de" role="menuitem"><span class="flag-icon">🇩🇪</span><span>Deutsch</span></button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-pressed="false">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+                <a href="applicant-signin.html" class="btn-outline btn-applicant">For Applicant</a>
+                <a href="employer-signup.html" class="btn-primary btn-employer">For Employers</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <div class="auth-card applicant">
+            <div class="auth-avatar applicant"><i class="fas fa-user-plus"></i></div>
+            <h2>Create Applicant Account</h2>
+            <p class="muted">Find your dream job today!</p>
+
+            <form class="auth-form" id="applicantSignUpForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required minlength="6">
+                </div>
+                <div id="errorMessage" class="error-message" style="display: none; color: #ef4444; margin-bottom: 1rem;"></div>
+                <button type="submit" class="btn-auth-success">Create Account</button>
+            </form>
+
+            <div class="auth-legal">
+                <p>By creating an account, you agree to our <a href="terms.html">Terms</a>, <a href="cookies.html">Cookie</a>, and <a href="privacy.html">Privacy</a> policies.</p>
+            </div>
+            <div class="auth-footer">
+                <p>Already have an account? <a href="applicant-signin.html">Sign in</a></p>
+                <p>Are you an employer? <a href="employer-signup.html">Employer sign up →</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="../js/header.js"></script>
+    <script type="module">
+        document.getElementById('applicantSignUpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const name = form.name.value;
+            const email = form.email.value;
+            const password = form.password.value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        role: 'applicant'
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Sign up failed');
+                }
+
+                const data = await response.json();
+
+                // Auto sign in
+                const signInResponse = await fetch('http://127.0.0.1:8000/api/signin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const signInData = await signInResponse.json();
+
+                // Save session
+                localStorage.setItem('applynhireSession', JSON.stringify({
+                    token: signInData.access_token,
+                    user: signInData.user
+                }));
+
+                // Redirect to dashboard
+                window.location.href = 'applicant-dashboard.html';
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

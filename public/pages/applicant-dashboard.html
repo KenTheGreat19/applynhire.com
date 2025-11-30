@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Dashboard - APPLY N HIRE</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="vendor/images/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+<body>
+    <header class="site-header">
+        <div class="container header-row header-content">
+            <div class="brand">
+                <a class="site-logo" href="index.html">
+                    <img class="site-logo-img" src="vendor/images/logo.png" onerror="this.onerror=null;this.src='vendor/images/logo.svg'" alt="APPLY N HIRE">
+                    <span class="site-title">APPLY N HIRE</span>
+                </a>
+                <p class="tagline">Apply Job and Hire Talent for Free!</p>
+            </div>
+
+            <div class="header-actions right-nav">
+                <!-- Language selector -->
+                <div class="language-selector" id="languageSelector">
+                    <button class="lang-btn" id="langBtn" aria-expanded="false" aria-haspopup="true" aria-controls="langDropdown">
+                        <span class="flag-icon" aria-hidden="true">🇬🇧</span>
+                        <span class="sr-only">Change language</span>
+                    </button>
+                    <div class="lang-dropdown" id="langDropdown" role="menu" aria-hidden="true">
+                        <button class="lang-option" data-lang="en" role="menuitem">
+                            <span class="flag-icon">🇬🇧</span>
+                            <span>English</span>
+                        </button>
+                        <button class="lang-option" data-lang="es" role="menuitem">
+                            <span class="flag-icon">🇪🇸</span>
+                            <span>Español</span>
+                        </button>
+                        <button class="lang-option" data-lang="fr" role="menuitem">
+                            <span class="flag-icon">🇫🇷</span>
+                            <span>Français</span>
+                        </button>
+                        <button class="lang-option" data-lang="de" role="menuitem">
+                            <span class="flag-icon">🇩🇪</span>
+                            <span>Deutsch</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Theme toggle -->
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme" aria-pressed="false">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                    <span class="sr-only">Toggle theme</span>
+                </button>
+
+                <!-- Employer / Sign in -->
+                <a href="employer.html" class="for-employers-btn">For Employers</a>
+                <a href="applicant.html" class="sign-in-btn">Sign In</a>
+
+                <nav class="auth-nav" aria-label="Authentication Navigation"></nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container profile-page">
+        <div class="profile-card">
+            <h2 id="welcome">Hello, Applicant</h2>
+            <p id="email"></p>
+            <p id="role"></p>
+            <p>Use the main site to search and apply for jobs.</p>
+            <button id="signOutBtn" class="secondary-btn">Sign Out</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 APPLY N HIRE. | applynhire.com</p>
+        </div>
+    </footer>
+
+    <script type="module" src="js/header.ts"></script>
+    <script>
+        // Basic session check
+        function getSession() {
+            const raw = localStorage.getItem('applynhireSession');
+            return raw ? JSON.parse(raw) : null;
+        }
+
+        const session = getSession();
+        if (!session || session.role !== 'applicant') {
+            alert('You are not signed in as an applicant. Redirecting to Sign In.');
+            location.href = 'applicant.html';
+        } else {
+            document.getElementById('welcome').textContent = `Hello, ${session.name || 'Applicant'}`;
+            document.getElementById('email').textContent = session.email;
+            document.getElementById('role').textContent = `Role: ${session.role}`;
+        }
+
+        document.getElementById('signOutBtn').addEventListener('click', () => {
+            localStorage.removeItem('applynhireSession');
+            location.href = 'applicant.html';
+        });
+    </script>
+</body>
+</html>

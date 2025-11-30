@@ -1,15 +1,15 @@
 {
-  "buildCommand": "npm run type-check",
-  "outputDirectory": "site",
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
     {
-      "source": "/js/(.*).ts",
+      "source": "/assets/(.*)",
       "headers": [
         {
-          "key": "Content-Type",
-          "value": "application/javascript"
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
@@ -19,6 +19,14 @@
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
         }
       ]
     }
@@ -27,6 +35,10 @@
     {
       "source": "/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "http://127.0.0.1:8000/api/:path*"
     }
   ]
 }

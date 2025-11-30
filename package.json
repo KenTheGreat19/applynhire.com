@@ -1,18 +1,47 @@
 {
   "name": "applynhire",
   "version": "1.0.0",
-  "description": "Job aggregator platform",
+  "description": "Enterprise job aggregator platform",
   "scripts": {
+    "dev": "http-server public -p 8080 -c-1",
+    "build": "npm run clean && npm run type-check && npm run compile",
+    "compile": "tsc --project config/tsconfig.json",
     "type-check": "tsc --project config/tsconfig.json --noEmit",
-    "build": "npm run type-check",
-    "dev": "http-server site -p 8080"
+    "clean": "rm -rf dist",
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix",
+    "format": "prettier --write 'src/**/*.{ts,js,json,css,html}'",
+    "format:check": "prettier --check 'src/**/*.{ts,js,json,css,html}'",
+    "test": "echo 'No tests yet' && exit 0",
+    "test:watch": "echo 'No tests yet' && exit 0",
+    "test:coverage": "echo 'No tests yet' && exit 0",
+    "serve": "npm run dev",
+    "start": "npm run dev"
   },
+  "keywords": [
+    "jobs",
+    "recruitment",
+    "hiring",
+    "platform",
+    "typescript",
+    "fastapi"
+  ],
+  "author": "",
+  "license": "MIT",
   "dependencies": {
     "leaflet": "^1.9.4"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.8",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
     "typescript": "^5.3.3",
     "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
