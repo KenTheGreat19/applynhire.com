@@ -1,0 +1,22 @@
+# Scrapy dependencies
+Scrapy>=2.11.0
+scrapy-rotating-proxies>=0.6.2
+scrapy-user-agents>=0.1.1
+
+# Parsing
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+parsel>=1.8.0
+w3lib>=2.1.0
+
+# Browser automation (for JavaScript-heavy sites)
+selenium>=4.15.0
+playwright>=1.40.0
+scrapy-playwright>=0.0.33
+
+# Database
+pymongo>=4.6.0
+
+# Utils
+python-dotenv>=1.0.0
+dateparser>=1.2.0

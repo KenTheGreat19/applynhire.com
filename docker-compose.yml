@@ -1,32 +1,128 @@
-# Docker configuration for production deployment
-# Coming soon
-
 version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    ports:
-      - "8080:80"
-    depends_on:
-      - backend
+  # PostgreSQL Database (for users, payments)
+  postgres:
+    image: postgres:15-alpine
+    container_name: applynhire-postgres
     environment:
-      - API_BASE_URL=http://backend:8000
+      POSTGRES_DB: applynhire
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
+  # MongoDB Database (for jobs)
+  mongodb:
+    image: mongo:7
+    container_name: applynhire-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (for caching and Celery)
+  redis:
+    image: redis:7-alpine
+    container_name: applynhire-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Django Backend
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: applynhire-backend
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=sqlite:///./applynhire.db
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - DEBUG=True
+      - DJANGO_SECRET_KEY=dev-secret-key-change-in-production
+      - POSTGRES_DB=applynhire
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - MONGODB_URI=mongodb://root:rootpassword@mongodb:27017/applynhire?authSource=admin
+      - MONGODB_DB=applynhire
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: applynhire-frontend
+    command: npm run dev -- --host
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+      - VITE_AUTH_URL=http://localhost:8000/api/auth
+    depends_on:
+      - backend
+
+  # Celery Worker (for background tasks)
+  celery:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: applynhire-celery
+    command: celery -A config worker -l INFO
     volumes:
       - ./backend:/app
-      - db-data:/app/data
+    environment:
+      - DEBUG=True
+      - POSTGRES_DB=applynhire
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - MONGODB_URI=mongodb://root:rootpassword@mongodb:27017/applynhire?authSource=admin
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - backend
+      - redis
 
 volumes:
-  db-data:
+  postgres_data:
+  mongodb_data:
+  redis_data:
